@@ -18,7 +18,7 @@
                                     : 'text-white hover:bg-white/[0.12]',
                             ]"
                         >
-                            Log In
+                            {{ $t("login") }}
                         </button>
                     </Tab>
                     <Tab v-slot="{ selected }" class="w-full outline-none">

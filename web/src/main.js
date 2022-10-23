@@ -31,7 +31,7 @@ import Toast from "vue-toastification";
 
 import App from "./App.vue";
 import router from "./router";
-import { i18n } from "./locales/i18n";
+import { i18n } from "./utils/i18n";
 
 const app = createApp(App);
 

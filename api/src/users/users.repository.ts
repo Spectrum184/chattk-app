@@ -218,6 +218,7 @@ export class UsersRepository {
         otherUserId: string,
         userProfile: User,
         message: string,
+        type: string,
         wasFriend?: boolean
     ) {
         let chatId: string | undefined;

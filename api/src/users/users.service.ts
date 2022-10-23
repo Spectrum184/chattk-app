@@ -22,7 +22,7 @@ import { ConfigService } from "@nestjs/config";
 import bcrypt from "bcrypt";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { ulid } from "ulid";
-import { UserError } from "./users.constants";
+import { UserError, UserType } from "./users.constants";
 import { UsersRepository } from "./users.repository";
 
 @Injectable()
@@ -182,6 +182,7 @@ export class UsersService {
         );
         if (!relationship) throw new NotFoundException(UserError.userNotFound);
         let message: string;
+        let type: string;
 
         switch (relationship.status) {
             case RelationStatus.BlockedByOther:
@@ -190,24 +191,30 @@ export class UsersService {
                 throw new ConflictException(UserError.blockUser);
             case RelationStatus.Friend:
                 message = UserError.friendRemove;
+                type = UserType.friendRemove;
                 return await this.userRepository.removeFriendTransaction(
                     otherUserId,
                     user,
                     message,
+                    type,
                     true
                 );
             case RelationStatus.Outgoing:
                 message = UserError.cancelRequest;
+                type = UserType.cancelRequest;
                 return await this.userRepository.removeFriendTransaction(
                     otherUserId,
                     user,
+                    type,
                     message
                 );
             case RelationStatus.Incoming:
                 message = UserError.declinedRequest;
+                type = UserType.declinedRequest;
                 return await this.userRepository.removeFriendTransaction(
                     otherUserId,
                     user,
+                    type,
                     message
                 );
             default:

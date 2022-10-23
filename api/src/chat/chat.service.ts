@@ -107,8 +107,8 @@ export class ChatService {
         });
 
         return {
-            ...convertMongoObj(message),
             timestamp: decodeTime(message._id),
+            ...convertMongoObj(message),
         };
     }
 
@@ -139,8 +139,13 @@ export class ChatService {
         }
 
         const query: Filter<MessageDoc> = { chatId };
-        if (before) query._id = { $lt: before };
-        else if (after) query._id = { $gt: after };
+
+        if (before) {
+            query._id = { $lt: before };
+        } else if (after) {
+            query._id = { $gt: after };
+        }
+
         const messages = await this.chatRepository.findMessages(query, limit);
 
         this.logger.debug({
@@ -150,8 +155,8 @@ export class ChatService {
         });
         return messages.map((message) => {
             return {
-                ...convertMongoObj(message),
                 timestamp: decodeTime(message._id),
+                ...convertMongoObj(message),
             };
         });
     }
@@ -160,8 +165,8 @@ export class ChatService {
         const messages = await this.chatRepository.getMessagesById(ids);
         return messages.map((message) => {
             return {
-                ...convertMongoObj(message),
                 timestamp: decodeTime(message._id),
+                ...convertMongoObj(message),
             };
         });
     }

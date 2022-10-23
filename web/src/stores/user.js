@@ -6,6 +6,7 @@ import axios from "axios";
 import { defineStore } from "pinia";
 import localforage from "localforage";
 import platform from "platform";
+import { relationStatus, userType } from "@/utils/constants";
 
 export const useUserStore = defineStore({
     id: "user",
@@ -22,19 +23,20 @@ export const useUserStore = defineStore({
             state.users.find((user) => user.id === userId),
         canSendMessageToUser() {
             return (userId) =>
-                this.getUserById(userId)?.relationship === "Friend";
+                this.getUserById(userId)?.relationship ===
+                relationStatus.Friend;
         },
         getFriends: (state) =>
             state.users
-                ?.filter((user) => user.relationship === "Friend")
+                ?.filter((user) => user.relationship === relationStatus.Friend)
                 .sort((a, b) => compareString(a.username, b.username)),
         getIncomingRequests: (state) =>
             state.users
-                .filter((user) => user.relationship === "Incoming")
+                .filter((user) => user.relationship === relationStatus.Incoming)
                 .sort((a, b) => compareString(a.username, b.username)),
         getOutgoingRequests: (state) =>
             state.users
-                .filter((user) => user.relationship === "Outgoing")
+                .filter((user) => user.relationship === relationStatus.Outgoing)
                 .sort((a, b) => compareString(a.username, b.username)),
     },
     actions: {
@@ -98,9 +100,9 @@ export const useUserStore = defineStore({
             return api
                 .put(`/users/${id}/friend?type=id`)
                 .then((res) => {
-                    if (res.data.message === "Friend request accepted.") {
+                    if (res.data.type === userType.requestAccepted) {
                         this.setUserRelatedToFriend(id);
-                    } else if (res.data.message === "Friend request sent.") {
+                    } else if (res.data.type === userType.requestSent) {
                         // gonna deal with that 0.000000000000001% that this ever SOMEHOW happens.
                         this.setUserRelatedToOutgoingOrAddUser(
                             id,
@@ -117,14 +119,12 @@ export const useUserStore = defineStore({
             return api
                 .put(`/users/${username}/friend`)
                 .then((res) => {
-                    if (res.data.message === "Friend request sent.") {
+                    if (res.data.type === userType.requestSent) {
                         this.setUserRelatedToOutgoingOrAddUser(
                             res.data.user.id,
                             res.data.user.username
                         );
-                    } else if (
-                        res.data.message === "Friend request accepted."
-                    ) {
+                    } else if (res.data.type === userType.requestAccepted) {
                         this.setUserRelatedToFriend(res.data.user.id);
                     }
                     return { ok: res.data.message };
@@ -157,7 +157,7 @@ export const useUserStore = defineStore({
             if (userExists) {
                 this.users = this.users.map((user) => {
                     if (user.id === id) {
-                        user.relationship = "Outgoing";
+                        user.relationship = relationStatus.Outgoing;
                     }
                     return user;
                 });
@@ -165,7 +165,7 @@ export const useUserStore = defineStore({
                 this.users.push({
                     id: id,
                     username: username,
-                    relationship: "Outgoing",
+                    relationship: relationStatus.Outgoing,
                 });
             }
         },
@@ -174,7 +174,7 @@ export const useUserStore = defineStore({
             if (userExists) {
                 this.users = this.users.map((user) => {
                     if (user.id === id) {
-                        user.relationship = "Incoming";
+                        user.relationship = relationStatus.Incoming;
                     }
                     return user;
                 });
@@ -182,14 +182,14 @@ export const useUserStore = defineStore({
                 this.users.push({
                     id: id,
                     username: username,
-                    relationship: "Incoming",
+                    relationship: relationStatus.Incoming,
                 });
             }
         },
         setUserRelatedToFriend(id) {
             this.users = this.users.map((user) => {
                 if (user.id === id) {
-                    user.relationship = "Friend";
+                    user.relationship = relationStatus.Friend;
                 }
                 return user;
             });
@@ -197,7 +197,7 @@ export const useUserStore = defineStore({
         setUserRelationToNone(id) {
             this.users = this.users.map((user) => {
                 if (user.id === id) {
-                    user.relationship = "None";
+                    user.relationship = relationStatus.None;
                 }
                 return user;
             });

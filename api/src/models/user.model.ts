@@ -5,6 +5,7 @@ export interface User {
     profile?: {
         relations?: Relation[];
     } | null;
+    email: string;
 }
 export interface UserDoc extends Omit<User, "id"> {
     _id: string;

@@ -19,7 +19,6 @@
         "noFallthroughCasesInSwitch": true,
         "allowUnreachableCode": false,
         "exactOptionalPropertyTypes": true,
-        // "noPropertyAccessFromIndexSignature": true,
         "strictPropertyInitialization": false,
         "paths": {
             "@/*": ["src/*"]

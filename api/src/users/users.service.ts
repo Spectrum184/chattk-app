@@ -1,19 +1,14 @@
+import { convertMongoObj } from "@/common/helper";
 import { MONGODB_PROVIDER } from "@/constants";
-import { MongoDB } from "@/database/database.interface";
+import { CreateUserDto } from "@/dto/auth.dto";
 import { OnlineSocketsList } from "@/dto/chat.dto";
 import { AddFriendDto, RemoveFriendDto } from "@/dto/user.dto";
-import { Chat, chatProjection, ChatType } from "@/models/chat.model";
 import {
     Relation,
     RelationStatus,
     User,
-    UserDoc,
     UserNoProfile,
-    UserNoProfileDoc,
-    userNoProfileProjection,
-    userProjection,
     UserRelation,
-    userRelationsProjection,
 } from "@/models/user.model";
 import {
     ConflictException,
@@ -21,92 +16,58 @@ import {
     Inject,
     Injectable,
     InternalServerErrorException,
-    Logger,
     NotFoundException,
-    UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import bcrypt from "bcrypt";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { ulid } from "ulid";
 import { UserError } from "./users.constants";
+import { UsersRepository } from "./users.repository";
 
 @Injectable()
 export class UsersService {
     constructor(
         @Inject(MONGODB_PROVIDER)
-        private mongo: MongoDB,
         private configService: ConfigService,
         @InjectPinoLogger(UsersService.name)
-        private logger: PinoLogger
+        private logger: PinoLogger,
+        private userRepository: UsersRepository
     ) {}
 
     async findOneByName(username: string): Promise<User | null> {
-        const result = await this.mongo.users.findOne(
-            { username },
-            {
-                projection: userProjection,
-                collation: { locale: "en", strength: 2 },
-            }
-        );
+        const result = await this.userRepository.findOneByName(username);
+
         if (!result) return null;
-        const { _id: id, ...user } = result;
-        return {
-            id,
-            ...user,
-        };
+
+        return convertMongoObj(result);
     }
 
     async findOneNoProfileByName(
         username: string
     ): Promise<UserNoProfile | null> {
-        const result = await this.mongo.users.findOne<UserNoProfileDoc>(
-            { username },
-            {
-                projection: userNoProfileProjection,
-                collation: { locale: "en", strength: 2 },
-            }
+        const result = await this.userRepository.findOneNoProfileByName(
+            username
         );
         if (!result) return null;
 
-        const { _id: id, ...user } = result;
-        return {
-            id,
-            ...user,
-        };
+        return convertMongoObj(result);
     }
 
     async findOneById(userId: string): Promise<User | null> {
-        const result = await this.mongo.users.findOne(
-            {
-                _id: userId,
-            },
-            { projection: userProjection }
-        );
+        const result = await this.userRepository.findOneById(userId);
         if (!result) return null;
-        const { _id: id, ...user } = result;
-        return { id, ...user };
+        return convertMongoObj(result);
     }
 
     async findOneNoProfileById(userId: string): Promise<UserNoProfile | null> {
-        const result = await this.mongo.users.findOne<UserNoProfileDoc>(
-            { _id: userId },
-            { projection: userNoProfileProjection }
-        );
+        const result = await this.userRepository.findOneNoProfileById(userId);
         if (!result) return null;
-        const { _id: id, ...user } = result;
-        return { id, ...user };
+        return convertMongoObj(result);
     }
 
     async findRelationsOfUser(id: string): Promise<UserRelation[]> {
-        const userRelations = await this.mongo.users.findOne<{
-            profile: { relations: UserRelation[] };
-        }>(
-            { _id: id },
-            {
-                projection: userRelationsProjection,
-            }
-        );
+        const userRelations = await this.userRepository.findRelationsOfUser(id);
         return userRelations?.profile?.relations
             ? userRelations.profile.relations
             : [];
@@ -117,16 +78,7 @@ export class UsersService {
         sockets: OnlineSocketsList,
         relations: Relation[]
     ) {
-        const users = await this.mongo.users
-            .find<{ _id: string; username: string }>(
-                {
-                    _id: {
-                        $in: userIds,
-                    },
-                },
-                { projection: { _id: 1, username: 1 } }
-            )
-            .toArray();
+        const users = await this.userRepository.findUsers(userIds);
 
         return users.map(({ _id: id, username }) => {
             /* istanbul ignore next */
@@ -145,10 +97,7 @@ export class UsersService {
     }
 
     async getFriendIds(userId: string): Promise<string[]> {
-        const user = await this.mongo.users.findOne(
-            { _id: userId },
-            { projection: { profile: { relations: 1 } } }
-        );
+        const user = await this.userRepository.findFriendIds(userId);
         if (!user?.profile?.relations || user.profile.relations.length === 0)
             return [];
         return user.profile.relations
@@ -183,132 +132,36 @@ export class UsersService {
                 case RelationStatus.Blocked:
                     throw new ConflictException(UserError.blockedUser);
                 case RelationStatus.Outgoing: // accepts the friend request
-                    const session = this.mongo.client.startSession();
-                    let chat: Chat;
-                    try {
-                        await session.withTransaction(async () => {
-                            await this.mongo.users.updateOne(
-                                {
-                                    _id: receiverUser.id,
-                                    "profile.relations.id": sender.id,
-                                },
-                                {
-                                    $set: {
-                                        //@ts-ignore FIXME: seems like a bug in mongodb types not sure.
-                                        "profile.relations.$.status":
-                                            RelationStatus.Friend,
-                                    },
-                                },
-                                { session }
-                            );
-                            await this.mongo.users.updateOne(
-                                {
-                                    _id: sender.id,
-                                    "profile.relations.id": receiverUser.id,
-                                },
-                                {
-                                    $set: {
-                                        //@ts-ignore FIXME: seems like a bug in mongodb types not sure.
-                                        "profile.relations.$.status":
-                                            RelationStatus.Friend,
-                                    },
-                                },
-                                { session }
-                            );
-
-                            const result = await this.mongo.chats.findOne(
-                                {
-                                    chatType: ChatType.Direct,
-                                    "recipients.id": {
-                                        $all: [receiverUser.id, sender.id],
-                                    },
-                                },
-                                { projection: chatProjection, session }
-                            );
-                            if (result) {
-                                const { _id: id, ...chatData } = result;
-                                chat = { id, ...chatData };
-                                return;
-                            }
-                            const newChat = {
-                                _id: ulid(),
-                                chatType: ChatType.Direct,
-                                recipients: [
-                                    {
-                                        id: receiverUser.id,
-                                    },
-                                    {
-                                        id: sender.id,
-                                    },
-                                ],
-                            };
-                            await this.mongo.chats.insertOne(newChat, {
-                                session,
-                            });
-                            const { _id, ...rest } = newChat;
-                            chat = {
-                                id: _id,
-                                ...rest,
-                            };
-                            return;
-                        });
-                    } finally {
-                        await session.endSession();
-                    }
-
+                    const chat =
+                        await this.userRepository.updateAcceptFriendRequestTransaction(
+                            receiverUser,
+                            sender
+                        );
+                    if (!chat)
+                        return {
+                            user: {
+                                id: receiverUser.id,
+                                username: receiverUser.username,
+                            },
+                            message: UserError.requestAccepted,
+                        };
                     return {
                         user: {
                             id: receiverUser.id,
                             username: receiverUser.username,
                         },
-                        // @ts-ignore it IS assigned in the try block.
-                        chat,
+                        chat: convertMongoObj(chat),
                         message: UserError.requestAccepted,
                     };
             }
         }
 
         // sends a friend request
-        const session = this.mongo.client.startSession();
+        await this.userRepository.updateSendFriendRequestTransaction(
+            receiverUser,
+            sender
+        );
 
-        await session
-            .withTransaction(async () => {
-                await this.mongo.users.updateOne(
-                    {
-                        _id: receiverUser.id,
-                    },
-                    {
-                        $push: {
-                            "profile.relations": {
-                                id: sender.id,
-                                status: RelationStatus.Incoming,
-                            },
-                        },
-                    },
-                    {
-                        session,
-                    }
-                );
-                await this.mongo.users.updateOne(
-                    {
-                        _id: sender.id,
-                    },
-                    {
-                        $push: {
-                            "profile.relations": {
-                                id: receiverUser.id,
-                                status: RelationStatus.Outgoing,
-                            },
-                        },
-                    },
-                    {
-                        session,
-                    }
-                );
-            })
-            .finally(() => {
-                session.endSession();
-            });
         return {
             user: {
                 id: receiverUser.id,
@@ -329,65 +182,7 @@ export class UsersService {
         );
         if (!relationship) throw new NotFoundException(UserError.userNotFound);
         let message: string;
-        let type: string;
 
-        const removeFriendTransaction = async (wasFriend?: boolean) => {
-            let chatId: string | undefined;
-            const session = this.mongo.client.startSession();
-            try {
-                await session.withTransaction(async () => {
-                    await this.mongo.users.updateOne(
-                        {
-                            _id: userProfile.id,
-                        },
-                        {
-                            $pull: {
-                                "profile.relations": {
-                                    id: otherUserId,
-                                },
-                            },
-                        },
-                        { session }
-                    );
-                    await this.mongo.users.updateOne(
-                        {
-                            _id: otherUserId,
-                        },
-                        {
-                            $pull: {
-                                "profile.relations": {
-                                    id: userProfile.id,
-                                },
-                            },
-                        },
-                        { session }
-                    );
-                    if (wasFriend) {
-                        const chat = await this.mongo.chats.findOne<{
-                            _id: string;
-                        }>(
-                            {
-                                chatType: ChatType.Direct,
-                                "recipients.id": {
-                                    $all: [otherUserId, userProfile.id],
-                                },
-                            },
-                            { projection: { _id: 1 } }
-                        );
-                        if (chat) chatId = chat._id;
-                    }
-                });
-            } finally {
-                await session.endSession();
-            }
-            return {
-                user: {
-                    id: otherUserId,
-                },
-                chatId,
-                message,
-            };
-        };
         switch (relationship.status) {
             case RelationStatus.BlockedByOther:
                 throw new ConflictException(UserError.blockedUser);
@@ -395,13 +190,26 @@ export class UsersService {
                 throw new ConflictException(UserError.blockUser);
             case RelationStatus.Friend:
                 message = UserError.friendRemove;
-                return await removeFriendTransaction(true);
+                return await this.userRepository.removeFriendTransaction(
+                    otherUserId,
+                    user,
+                    message,
+                    true
+                );
             case RelationStatus.Outgoing:
                 message = UserError.cancelRequest;
-                return await removeFriendTransaction();
+                return await this.userRepository.removeFriendTransaction(
+                    otherUserId,
+                    user,
+                    message
+                );
             case RelationStatus.Incoming:
                 message = UserError.declinedRequest;
-                return await removeFriendTransaction();
+                return await this.userRepository.removeFriendTransaction(
+                    otherUserId,
+                    user,
+                    message
+                );
             default:
                 this.logger.error({
                     event: `user_friend_remove_failed:${otherUserId},${user.id},invalid_relation_status`,
@@ -413,7 +221,11 @@ export class UsersService {
         }
     }
 
-    async createUser(username: string, password: string): Promise<void> {
+    async createUser({
+        username,
+        password,
+        email,
+    }: CreateUserDto): Promise<void> {
         if (this.configService.get("disableSignup")) {
             this.logger.warn({
                 event: `user_create_fail:${username},signup_disabled`,
@@ -421,10 +233,7 @@ export class UsersService {
             });
             throw new ImATeapotException(UserError.currentlyOff);
         }
-        const userExists = await this.mongo.users.findOne<{ _id: string }>(
-            { username },
-            { projection: { _id: 1 }, collation: { locale: "en", strength: 2 } }
-        );
+        const userExists = await this.userRepository.findExistUser(username);
         if (userExists) {
             this.logger.warn({
                 event: `user_create_fail:${username},user_exists`,
@@ -438,15 +247,15 @@ export class UsersService {
         );
 
         const id = ulid();
-        await this.mongo.users.insertOne({
-            _id: id,
+        await this.userRepository.saveUser({
+            id: ulid(),
             username,
             passwordHash,
+            email,
         });
         this.logger.info({
             event: `user_created:${id}`,
             msg: `A new user account was created with the username ${username}.`,
         });
-        return;
     }
 }

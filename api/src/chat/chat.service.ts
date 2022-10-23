@@ -1,20 +1,10 @@
-import { MONGODB_PROVIDER } from "@/constants";
-import { MongoDB } from "@/database/database.interface";
+import { convertMongoObj } from "@/common/helper";
 import { SaveDirectMessageDto } from "@/dto/chat.dto";
-import {
-    Chat,
-    ChatDoc,
-    chatProjection,
-    ChatType,
-    Message,
-    MessageDoc,
-    messageProjection,
-} from "@/models/chat.model";
+import { Chat, ChatType, Message, MessageDoc } from "@/models/chat.model";
 import { RelationStatus } from "@/models/user.model";
 import { UsersService } from "@/users/users.service";
 import {
     ForbiddenException,
-    Inject,
     Injectable,
     InternalServerErrorException,
     NotFoundException,
@@ -23,6 +13,7 @@ import { Filter } from "mongodb";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { decodeTime, monotonicFactory } from "ulid";
 import { ChatError } from "./chat.constants";
+import { ChatRepository } from "./chat.repository";
 
 @Injectable()
 export class ChatService {
@@ -30,26 +21,18 @@ export class ChatService {
 
     constructor(
         private usersService: UsersService,
-        @Inject(MONGODB_PROVIDER)
-        private mongo: MongoDB,
+        private chatRepository: ChatRepository,
         @InjectPinoLogger(ChatService.name)
         private logger: PinoLogger
     ) {}
 
     async getChatsOfUser(userId: string): Promise<Chat[]> {
-        const results = await this.mongo.chats
-            .find(
-                {
-                    "recipients.id": userId,
-                },
-                { projection: chatProjection }
-            )
-            .toArray();
+        const results = await this.chatRepository.getChatsOfUser(userId);
         return results.map((result) => {
-            const { _id: id, ...chat } = result;
-            return { id, ...chat };
+            return convertMongoObj(result);
         });
     }
+
     async saveDirectMessage(
         authorId: string,
         chatId: string,
@@ -57,14 +40,7 @@ export class ChatService {
     ): Promise<SaveDirectMessageDto> {
         const oldTime = Date.now();
 
-        const chat = await this.mongo.chats.findOne<
-            Pick<ChatDoc, "chatType" | "recipients">
-        >(
-            {
-                _id: chatId,
-            },
-            { projection: { chatType: 1, _id: 0, recipients: 1 } }
-        );
+        const chat = await this.chatRepository.findChat(chatId);
 
         if (!chat) {
             this.logger.warn({
@@ -121,30 +97,17 @@ export class ChatService {
             content,
         };
 
-        const session = this.mongo.client.startSession();
-        try {
-            await session.withTransaction(async () => {
-                await this.mongo.messages.insertOne(message, { session });
-                await this.mongo.chats.updateOne(
-                    { _id: chatId },
-                    { $set: { lastMessageId: message._id } },
-                    { session }
-                );
-                return;
-            });
-        } finally {
-            await session.endSession();
-        }
+        await this.chatRepository.saveMessage(chatId, message);
+
         this.logger.debug({
             event: `message_direct_created:${chatId}`,
             msg: `Message saved ${message._id}`,
             duration: Date.now() - oldTime,
             message_content: message.content,
         });
-        const { _id: id, ...rest } = message;
+
         return {
-            ...rest,
-            id,
+            ...convertMongoObj(message),
             timestamp: decodeTime(message._id),
         };
     }
@@ -158,19 +121,8 @@ export class ChatService {
     ): Promise<Message[]> {
         const oldTime = Date.now();
 
-        const chat = await this.mongo.chats.findOne<
-            Pick<ChatDoc, "recipients">
-        >(
-            {
-                _id: chatId,
-            },
-            {
-                projection: {
-                    _id: 0,
-                    recipients: 1,
-                },
-            }
-        );
+        const chat = await this.chatRepository.findChat(chatId);
+
         if (!chat) {
             this.logger.warn({
                 event: `message_get_many_fail:${chatId},chat_not_exist`,
@@ -189,11 +141,7 @@ export class ChatService {
         const query: Filter<MessageDoc> = { chatId };
         if (before) query._id = { $lt: before };
         else if (after) query._id = { $gt: after };
-        const messages = await this.mongo.messages
-            .find(query, { projection: messageProjection })
-            .sort({ _id: -1 })
-            .limit(limit)
-            .toArray();
+        const messages = await this.chatRepository.findMessages(query, limit);
 
         this.logger.debug({
             event: `message_get_many_success:${chatId},before:${before},after:${after},limit:${limit}`,
@@ -201,18 +149,20 @@ export class ChatService {
             duration: Date.now() - oldTime,
         });
         return messages.map((message) => {
-            const { _id: id, ...data } = message;
-            return { id, ...data, timestamp: decodeTime(id) };
+            return {
+                ...convertMongoObj(message),
+                timestamp: decodeTime(message._id),
+            };
         });
     }
 
     async getMessagesById(ids: string[]): Promise<Message[]> {
-        const messages = await this.mongo.messages
-            .find({ _id: { $in: ids } }, { projection: messageProjection })
-            .toArray();
+        const messages = await this.chatRepository.getMessagesById(ids);
         return messages.map((message) => {
-            const { _id: id, ...data } = message;
-            return { id, ...data, timestamp: decodeTime(id) };
+            return {
+                ...convertMongoObj(message),
+                timestamp: decodeTime(message._id),
+            };
         });
     }
 }

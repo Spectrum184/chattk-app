@@ -1,22 +1,20 @@
-import { MONGODB_PROVIDER } from "@/constants";
-import { MongoDB } from "@/database/database.interface";
 import { ulid } from "ulid";
 import { User, UserNoProfile } from "@/models/user.model";
 import { UsersService } from "@/users/users.service";
-import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import bcrypt from "bcrypt";
 import { nanoid } from "nanoid/async";
 import { ConfigService } from "@nestjs/config";
-import { SessionDoc, sessionProjection } from "@/models/session.model";
+import { SessionDoc } from "@/models/session.model";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { AuthError, HttpMessage } from "./auth.constants";
+import { AuthRepository } from "./auth.repository";
 
 @Injectable()
 export class AuthService {
     constructor(
         private userService: UsersService,
-        @Inject(MONGODB_PROVIDER)
-        private mongo: MongoDB,
+        private authRepository: AuthRepository,
         private config: ConfigService,
         @InjectPinoLogger(AuthService.name)
         private logger: PinoLogger
@@ -75,10 +73,7 @@ export class AuthService {
         | AuthError.sessionNotFound
         | AuthError.userNotFound
     > {
-        const session = await this.mongo.sessions.findOne(
-            { token: token },
-            { projection: sessionProjection }
-        );
+        const session = await this.authRepository.findOneSession(token);
         if (!session) return AuthError.sessionNotFound;
         const user = returnFullUser
             ? await this.userService.findOneById(session.userId)
@@ -103,25 +98,18 @@ export class AuthService {
             token,
         };
         if (name) doc.name = name;
-        await this.mongo.sessions.insertOne(doc);
+        await this.authRepository.insertSession(doc);
         return { id, token };
     }
 
     touchSession(sessionId: string) {
-        return this.mongo.sessions.updateOne(
-            { _id: sessionId },
-            {
-                $set: {
-                    expiresAt: new Date(
-                        (Date.now() +
-                            this.config.get("sessionMaxAge")) as number
-                    ),
-                },
-            }
+        return this.authRepository.touchSession(
+            sessionId,
+            this.config.get("sessionMaxAge") as number
         );
     }
 
     deleteSession(sessionId: string) {
-        return this.mongo.sessions.deleteOne({ _id: sessionId });
+        return this.authRepository.deleteSession(sessionId);
     }
 }

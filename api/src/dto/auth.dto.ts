@@ -1,5 +1,6 @@
 import { PASSWORD_PATTERN, USERNAME_PATTERN } from "@/constants";
 import {
+    IsEmail,
     IsNotEmpty,
     IsOptional,
     IsString,
@@ -29,6 +30,9 @@ export class CreateUserDto {
     @Length(8, 72)
     @Matches(PASSWORD_PATTERN)
     password: string;
+
+    @IsEmail()
+    email: string;
 }
 
 export interface LoginResponseDto {

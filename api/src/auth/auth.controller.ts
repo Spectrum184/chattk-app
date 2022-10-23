@@ -1,11 +1,6 @@
 import { AuthenticatedGuard } from "@/common/guards/authenticated.guard";
 import { LoginGuard } from "@/common/guards/login.guard";
-import {
-    CreateUserDto,
-    GetUserDto,
-    LoginDto,
-    LoginResponseDto,
-} from "@/dto/auth.dto";
+import { CreateUserDto } from "@/dto/auth.dto";
 import { UsersService } from "@/users/users.service";
 import { WebsocketService } from "@/websocket/websocket.service";
 import {
@@ -15,15 +10,11 @@ import {
     Get,
     HttpCode,
     HttpStatus,
-    InternalServerErrorException,
     Post,
     Req,
     UseGuards,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { Request } from "express";
-import { promisify } from "util";
-import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "./auth.service";
 
 @Controller("auth")
@@ -48,7 +39,7 @@ export class AuthController {
 
     @Post("signup")
     async createUser(@Body() body: CreateUserDto): Promise<void> {
-        return this.usersService.createUser(body.username, body.password);
+        return this.usersService.createUser(body);
     }
 
     @Get("user")

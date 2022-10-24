@@ -1,4 +1,16 @@
 {
     "hello": "Xin chào!",
-    "login": "Đăng nhập"
+    "login": "Đăng nhập",
+    "password": "Mật khẩu",
+    "username": "Tên đăng nhập",
+    "loginPage": {
+        "loggedOutMessage": "Bạn đã đăng xuất.",
+        "createAccount": "Tạo tài khoản mới",
+        "createAccountSuccess": "Tạo tài khoản thành công, vui lòng dùng tên đăng nhập và mật khẩu để đăng nhập",
+        "enterUsername": "Vui lòng nhập tên",
+        "enterPassword": "Vui lòng nhập mật khẩu",
+        "loggingIn": "Đang đăng nhập",
+        "creatingAccount": "Đang tạo tài khoản",
+        "createAcc": "Tạo tài khảon"
+    }
 }

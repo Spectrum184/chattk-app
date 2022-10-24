@@ -1,12 +1,12 @@
 <template>
     <div class="h-full w-full flex">
-        <div class="m-auto w-[400px] p-2">
+        <div class="m-auto w-[400px] p-6 bg-emerald-600 rounded shadow">
             <p class="text-rose-400" v-if="isLoggedOut">
-                You've been logged out.
+                {{ t("loginPage.loggedOutMessage") }}
             </p>
             <TabGroup @change="changeTab">
                 <TabList
-                    class="flex space-x-1 rounded-md bg-slate-800 backdrop-blur-sm p-1"
+                    class="flex space-x-1 rounded-md bg-emerald-800 backdrop-blur-sm p-1"
                 >
                     <Tab v-slot="{ selected }" class="w-full outline-none">
                         <button
@@ -18,7 +18,7 @@
                                     : 'text-white hover:bg-white/[0.12]',
                             ]"
                         >
-                            {{ $t("login") }}
+                            {{ t("login") }}
                         </button>
                     </Tab>
                     <Tab v-slot="{ selected }" class="w-full outline-none">
@@ -31,7 +31,7 @@
                                     : 'text-white hover:bg-white/[0.12]',
                             ]"
                         >
-                            Create An Account
+                            {{ t("loginPage.createAccount") }}
                         </button>
                     </Tab>
                 </TabList>
@@ -55,8 +55,7 @@
                             v-if="isAccountCreated"
                         >
                             <p class="text-center">
-                                Your account has been created! login using your
-                                username and password to get started.
+                                {{ t("loginPage.createAccountSuccess") }}
                             </p>
                         </div>
                         <FormKit
@@ -85,11 +84,15 @@ import { clearErrors, FormKit, setErrors } from "@formkit/vue";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const isFormSubmitting = ref(false);
 const isLoggedOut = ref(false);
 const isAccountCreated = ref(false);
 const isSignupFormOpen = ref(false);
+const { t } = useI18n({
+    inheritLocale: true,
+});
 
 const userStore = useUserStore();
 useTitle(

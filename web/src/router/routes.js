@@ -1,4 +1,4 @@
-import chatLayout from "@/layouts/chatLayout.vue";
+import ChatLayout from "@/layouts/ChatLayout.vue";
 import ChatPage from "@/views/chat/ChatPage.vue";
 import FriendsPage from "@/views/friends/FriendsPage.vue";
 import HomeView from "@/views/IndexPage.vue";
@@ -7,7 +7,7 @@ export const routes = [
     {
         path: "/",
         name: "homeContainer",
-        component: chatLayout,
+        component: ChatLayout,
         children: [
             {
                 path: "",

@@ -1,4 +1,16 @@
 {
     "hello": "Hello!",
-    "login": "Log In"
+    "login": "Log In",
+    "password": "Username",
+    "username": "Password",
+    "loginPage": {
+        "loggedOutMessage": "You've been logged out.",
+        "createAccount": "Create An Account",
+        "loginSuccess": "Your account has been created! login using your username and password to get started.",
+        "enterUsername": "Enter your username",
+        "enterPassword": "Enter your password",
+        "loggingIn": "Logging In...",
+        "creatingAccount": "Creating account...",
+        "createAcc": "Create Account"
+    }
 }

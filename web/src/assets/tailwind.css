@@ -5,7 +5,7 @@
 #app,
 body,
 html {
-    @apply h-full bg-emerald-500 text-white dark:bg-slate-800;
+    @apply h-full bg-slate-50 text-white dark:bg-slate-800;
     --scrollbar-bg: rgba(0, 0, 0, 0);
     --scrollbar-btn: #475569;
     --scrollbar-btn-active: #64748b;

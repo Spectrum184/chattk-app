@@ -5,12 +5,27 @@
         :label="t('username')"
         validation="required:trim|matches:/^[a-zA-Z_0-9\-]*$/|length:3,30"
         :validation-messages="{
-            matches:
-                'Username can only contain english letters, numbers, hyphens and underscores.',
+            matches: t('loginPage.validateUsernameMessage'),
         }"
         :placeholder="t('loginPage.enterUsername')"
-        label-class="text-lg"
-        input-class="w-full p-2 transition rounded outline-none bg-slate-800 focus:ring-2 focus:ring-indigo-400"
+        label-class="text-md text-black"
+        input-class="w-full p-2 transition rounded outline-none border border-slate-300 bg-slate-100 focus:ring-1 focus:ring-emerald-500 text-black"
+        message-class="text-rose-400"
+        help-class="text-gray-400"
+    />
+    <FormKit
+        v-if="signUp"
+        type="text"
+        name="email"
+        :label="t('email')"
+        validation="required:trim|email"
+        :validation-messages="{
+            required: t('loginPage.validateRequired'),
+            email: t('loginPage.validateEmail'),
+        }"
+        placeholder="example@gmail.com"
+        label-class="text-md text-black"
+        input-class="w-full p-2 transition rounded outline-none border border-slate-300 bg-slate-100 focus:ring-1 focus:ring-emerald-500 text-black"
         message-class="text-rose-400"
         help-class="text-gray-400"
     />
@@ -20,13 +35,14 @@
         :label="t('password')"
         validation="required:trim|matches:/^[\w&.\-!?@#$%^&*]*$/|length:8,72"
         :validation-messages="{
-            matches:
-                'Password can only english contain letters, numbers and some special characters (i.e. &.-!?@#$%^&*).',
+            matches: `${t(
+                'loginPage.validatePasswordMessage'
+            )} (i.e. &.-!?@#$%^&*)`,
         }"
         :placeholder="t('loginPage.enterPassword')"
         wrapper-class="mt-2"
-        label-class="text-lg"
-        input-class="w-full p-2 rounded outline-none bg-slate-800 transition focus:ring-2 focus:ring-indigo-400"
+        label-class="text-md text-black"
+        input-class="w-full p-2 rounded outline-none border border-slate-300 bg-slate-100 transition focus:ring-2 focus:ring-emerald-500 text-black"
         message-class="text-rose-400"
         help-class="text-gray-400"
     >
@@ -34,7 +50,7 @@
             <button
                 @click="showPassword = !showPassword"
                 type="button"
-                class="text-white p-2 bg-emerald-800 rounded ml-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 hover:bg-emerald-700 transition"
+                class="p-2 bg-emerald-500 rounded ml-1.5 focus:outline-none focus:ring-2 hover:bg-emerald-600 transition"
             >
                 <EyeOffIcon v-if="showPassword" class="w-6 h-6" />
                 <EyeIcon v-else class="w-6 h-6" />
@@ -45,13 +61,13 @@
         v-if="signUp"
         :type="showConfirmPassword ? 'text' : 'password'"
         name="password_confirm"
-        label="Confirm password"
+        :label="t('loginPage.confirmPassword')"
         validation="required|confirm"
-        validation-label="Confirmation"
-        help="Re-enter your password"
+        :validation-label="t('loginPage.confirm')"
+        :placeholder="t('loginPage.reenterPassword')"
         wrapper-class="mt-2"
-        label-class="text-lg"
-        input-class="w-full p-2 transition rounded outline-none bg-slate-800 focus:ring-2 focus:ring-indigo-400"
+        label-class="text-md text-black"
+        input-class="w-full p-2 transition rounded outline-none border border-slate-300 bg-slate-100 transition focus:ring-2 focus:ring-emerald-500 text-black"
         message-class="text-rose-400"
         help-class="text-gray-400"
     >
@@ -59,7 +75,7 @@
             <button
                 @click="showConfirmPassword = !showConfirmPassword"
                 type="button"
-                class="text-white p-2 bg-emerald-800 rounded ml-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-400 hover:bg-slate-700 transition"
+                class="p-2 bg-emerald-500 rounded ml-1.5 focus:outline-none focus:ring-2 hover:bg-emerald-600 transition"
             >
                 <EyeOffIcon v-if="showConfirmPassword" class="w-6 h-6" />
                 <EyeIcon v-else class="w-6 h-6" />
@@ -69,7 +85,7 @@
     <FormKit
         type="submit"
         :disabled="isFormSubmitting"
-        wrapper-class="mt-4 w-full text-center bg-blue-700 rounded hover:bg-blue-600 transition"
+        wrapper-class="mt-4 w-full text-center bg-emerald-500 rounded hover:bg-emerald-600 transition"
         input-class="font-semibold p-2 w-full outline-none focus:ring-2 rounded focus:ring-indigo-400"
     >
         <p v-if="isFormSubmitting && !signUp">{{ t("loginPage.loggingIn") }}</p>

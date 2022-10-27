@@ -3,6 +3,7 @@
     "login": "Đăng nhập",
     "password": "Mật khẩu",
     "username": "Tên đăng nhập",
+    "email": "Email",
     "loginPage": {
         "loggedOutMessage": "Bạn đã đăng xuất.",
         "createAccount": "Tạo tài khoản mới",
@@ -11,6 +12,13 @@
         "enterPassword": "Vui lòng nhập mật khẩu",
         "loggingIn": "Đang đăng nhập",
         "creatingAccount": "Đang tạo tài khoản",
-        "createAcc": "Tạo tài khảon"
+        "createAcc": "Tạo tài khảon",
+        "confirmPassword": "Xác nhận tài khoản",
+        "reenterPassword": "Nhập lại mật khẩu",
+        "validateUsernameMessage": "Tên đăng nhập chỉ được dùng chữ cái không dấu, dấu gạch ngang, gạch chân hoặc số.",
+        "validatePasswordMessage": "Mật khẩu chỉ chứa các chữ cái không dấu, số và một số ký tự đặc biệt.",
+        "confirm": "Mật khẩu xác nhận",
+        "validateRequired": "cần thiết",
+        "validateEmail": "Vui lòng nhập đúng định dạng email"
     }
 }

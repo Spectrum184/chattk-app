@@ -3,6 +3,7 @@
     "login": "Log In",
     "password": "Username",
     "username": "Password",
+    "email": "Email",
     "loginPage": {
         "loggedOutMessage": "You've been logged out.",
         "createAccount": "Create An Account",
@@ -11,6 +12,13 @@
         "enterPassword": "Enter your password",
         "loggingIn": "Logging In...",
         "creatingAccount": "Creating account...",
-        "createAcc": "Create Account"
+        "createAcc": "Create Account",
+        "confirmPassword": "Confirm password",
+        "reenterPassword": "Re-enter your password",
+        "validateUsernameMessage": "Username can only contain english letters, numbers, hyphens and underscores.",
+        "validatePasswordMessage": "Password can only english contain letters, numbers and some special characters.",
+        "confirm": "Confirmation",
+        "validateRequired": "{{}}is required!",
+        "validateEmail": "Please enter the correct email format!"
     }
 }

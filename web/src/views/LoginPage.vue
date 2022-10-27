@@ -1,17 +1,15 @@
 <template>
     <div class="h-full w-full flex">
-        <div class="m-auto w-[400px] p-6 bg-emerald-600 rounded shadow">
+        <div class="m-auto w-[400px] p-6 rounded shadow-md">
             <p class="text-rose-400" v-if="isLoggedOut">
                 {{ t("loginPage.loggedOutMessage") }}
             </p>
             <TabGroup @change="changeTab">
-                <TabList
-                    class="flex space-x-1 rounded-md bg-emerald-800 backdrop-blur-sm p-1"
-                >
+                <TabList class="flex space-x-1 rounded-md bg-emerald-500 p-1">
                     <Tab v-slot="{ selected }" class="w-full outline-none">
                         <button
                             :class="[
-                                'w-full outline-none rounded py-2.5 text-sm font-medium leading-5 text-white',
+                                'w-full outline-none rounded py-2.5 text-md font-medium leading-5 text-white',
                                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
                                 selected
                                     ? 'bg-white/20 shadow font-semibold'
@@ -24,7 +22,7 @@
                     <Tab v-slot="{ selected }" class="w-full outline-none">
                         <button
                             :class="[
-                                'w-full outline-none rounded py-2.5 text-sm font-medium leading-5 text-white',
+                                'w-full outline-none rounded py-2.5 text-md font-medium leading-5 text-white',
                                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
                                 selected
                                     ? 'bg-white/30 shadow font-semibold'

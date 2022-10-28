@@ -1,8 +1,10 @@
 <template>
-    <div class="w-full bg-slate-900 flex flex-col shrink-0 min-h-[3rem]">
-        <div class="flex w-full p-2">
+    <div
+        class="w-full bg-gray-200 flex flex-col justify-center shrink-0 min-h-[4rem] mt-2"
+    >
+        <div class="flex w-full p-2 items-center">
             <button
-                class="self-end bg-gray-800 p-2 rounded-full mr-2 mb-[0.10rem] hover:bg-gray-600"
+                class="self-end bg-emerald-500 p-2 rounded-full mr-2 mb-[0.10rem] hover:bg-emerald-400"
             >
                 <UploadIcon class="h-4 w-4" />
             </button>
@@ -12,8 +14,8 @@
                 rows="1"
                 @input="handleInputTextarea"
                 @keydown="shouldSubmit"
-                class="max-h-[208px] bg-gray-800 resize-none outline-none p-1 rounded-full w-full"
-                placeholder="Type a message"
+                class="max-h-[208px] bg-gray-50 text-slate-800 resize-none outline-none p-1 rounded-full w-full"
+                :placeholder="t('chatPage.typeMessage')"
             />
             <button
                 @click="submitMessage"
@@ -21,8 +23,8 @@
                 :class="[
                     'self-end p-2 rounded-full ml-2 mb-[0.10rem]',
                     canSubmit
-                        ? 'bg-fuchsia-500 hover:bg-fuchsia-400'
-                        : 'bg-gray-800 hover:bg-gray-600',
+                        ? 'bg-emerald-500 hover:bg-emerald-400'
+                        : 'bg-gray-500',
                 ]"
             >
                 <ChevronRightIcon class="h-4 w-4" />
@@ -36,6 +38,7 @@ import { socket } from "@/utils/socket";
 import { ChevronRightIcon, UploadIcon } from "@heroicons/vue/outline";
 import { onStartTyping } from "@vueuse/core";
 import { computed, defineEmits, nextTick, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps(["chatId"]);
 const textarea = ref();
@@ -44,6 +47,9 @@ const message = ref("");
 const canSubmit = computed(() => !!message.value.trim());
 
 const messagesStore = useMessagesStore();
+const { t } = useI18n({
+    inheritLocale: true,
+});
 
 const emit = defineEmits(["scrollToBottom"]);
 

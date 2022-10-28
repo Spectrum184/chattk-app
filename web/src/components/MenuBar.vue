@@ -3,10 +3,8 @@
         <router-link
             :to="{ name: 'home' }"
             :class="[
-                'hover:opacity-80 transition leading-none p-4 my-2',
-                name === 'home' || name === 'chat'
-                    ? 'border-l-4 border-emerald-500'
-                    : '',
+                'hover:opacity-80 transition leading-none p-4 my-2 rounded-md',
+                name === 'home' || name === 'chat' ? 'bg-gray-200' : '',
             ]"
         >
             <HomeIcon class="h-6 w-6 text-emerald-500 mx-auto" />
@@ -14,8 +12,8 @@
         <router-link
             :to="{ name: 'friends' }"
             :class="[
-                'hover:opacity-80 transition leading-none p-4 my-2',
-                name === 'friends' ? 'border-l-4 border-emerald-500' : '',
+                'hover:opacity-80 transition leading-none p-4 my-2 rounded-md',
+                name === 'friends' ? 'bg-gray-200' : '',
             ]"
         >
             <IdentificationIcon class="h-6 w-6 text-emerald-500 mx-auto" />

@@ -16,6 +16,7 @@
 </template>
 <script setup>
 import Avatar from "./user/Avatar.vue";
+import router from "@/router";
 
 const goHome = () => {
     router.push("/");

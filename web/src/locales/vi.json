@@ -12,7 +12,7 @@
         "enterPassword": "Vui lòng nhập mật khẩu",
         "loggingIn": "Đang đăng nhập",
         "creatingAccount": "Đang tạo tài khoản",
-        "createAcc": "Tạo tài khảon",
+        "createAcc": "Tạo tài khoản",
         "confirmPassword": "Xác nhận tài khoản",
         "reenterPassword": "Nhập lại mật khẩu",
         "validateUsernameMessage": "Tên đăng nhập chỉ được dùng chữ cái không dấu, dấu gạch ngang, gạch chân hoặc số.",
@@ -28,6 +28,25 @@
     },
     "chatPage": {
         "reconnecting": "Đang kết nối lại",
-        "chat": "Chat"
-    }
+        "chat": "Chat",
+        "chatDescription": "Bắt đầu cuôc trò chuyện!",
+        "reloadMessage": "Vui lòng tải lại cuộc trò chuyện!",
+        "mustFriend": "Bạn không có bạn chung với ngừoi này.",
+        "typeMessage": "Tin nhắn...",
+        "sendMessage": "Chưa gửi được tin nhắn"
+    },
+    "friendPage": {
+        "friend": "Bạn bè",
+        "request": "Yêu cầu",
+        "addFriend": "Thêm bạn",
+        "incoming": "Hộp thư đến",
+        "outgoing": "Hộp thư đi",
+        "friendAdded": "Bạn có thể thêm một người bạn bằng tên người dùng của họ. Không phân biệt chữ hoa chữ thường",
+        "sendRequest": "Gửi yêu cầu",
+        "enterUsername": "Nhập tên đăng nhập hoặc email",
+        "sureRemove": "Bạn chắc chắn xoá",
+        "sureRemove2": "trong danh sách bạn bè? Bạn sẽ không tiếp tục chat với người này tới lúc bạn kết bạn lại."
+    },
+    "remove": "Xoá",
+    "cancel": "Huỷ bỏ"
 }

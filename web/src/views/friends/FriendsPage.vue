@@ -1,58 +1,51 @@
 <template>
     <div class="flex flex-col h-full w-full">
         <div class="h-14 p-2 flex items-center">
-            <button
-                @click="goHome"
-                class="md:hidden mr-2 leading-none text-emerald-600 hover:text-emerald-500 p-1"
-            >
-                <font-awesome-icon
-                    icon="fa-solid fa-arrow-left"
-                    class="w-5 h-5"
-                />
-            </button>
-            <h2 class="text-2xl leading-none font-medium">Friends</h2>
+            <h2 class="text-2xl leading-none font-medium text-slate-800">
+                {{ t("friendPage.friend") }}
+            </h2>
         </div>
         <TabGroup>
             <TabList
-                class="flex mx-2 space-x-1 rounded-md bg-slate-800 backdrop-blur-sm p-1"
+                class="flex mx-2 space-x-1 rounded-md bg-gray-300 backdrop-blur-sm p-1"
             >
                 <Tab v-slot="{ selected }" class="w-full outline-none">
                     <button
                         :class="[
                             'w-full outline-none rounded py-2.5 text-sm font-medium leading-5 text-white',
-                            'ring-emerald-500 ring-opacity-60 focus:outline-none focus:ring-2',
+                            'ring-gray-200 ring-opacity-60 focus:outline-none focus:ring-2',
                             selected
-                                ? 'bg-emerald-600/50 font-semibold'
-                                : 'text-white hover:bg-white/[0.12]',
+                                ? 'bg-emerald-500 font-semibold'
+                                : 'text-slate-800',
                         ]"
                     >
-                        Friends
+                        {{ t("friendPage.friend") }}
                     </button>
                 </Tab>
                 <Tab v-slot="{ selected }" class="w-full outline-none">
                     <button
                         :class="[
                             'w-full outline-none rounded py-2.5 text-sm font-medium leading-5 text-white',
-                            'ring-emerald-500 ring-opacity-60 focus:outline-none focus:ring-2',
+                            'ring-gray-200 ring-opacity-60 focus:outline-none focus:ring-2',
                             selected
-                                ? 'bg-emerald-600/50 font-semibold'
-                                : 'text-white hover:bg-white/[0.12]',
+                                ? 'bg-emerald-500 font-semibold'
+                                : 'text-slate-800',
                         ]"
                     >
-                        Requests
+                        {{ t("friendPage.request") }}
                     </button>
                 </Tab>
                 <Tab v-slot="{ selected }" class="w-full outline-none">
                     <button
                         :class="[
                             'w-full outline-none rounded py-2.5 text-sm font-medium leading-5 text-white',
-                            'ring-emerald-500 ring-opacity-60 focus:outline-none focus:ring-2',
+                            'ring-gray-200 ring-opacity-60 focus:outline-none focus:ring-2',
                             selected
-                                ? 'bg-emerald-600/50 font-semibold'
-                                : 'text-white hover:bg-white/[0.12]',
+                                ? 'bg-emerald-500 font-semibold'
+                                : 'text-slate-800',
                         ]"
                     >
-                        Add Friend
+                        {{ t("friendPage.addFriend") }}
                     </button>
                 </Tab>
             </TabList>
@@ -75,15 +68,14 @@
                         v-slot="{ open }"
                     >
                         <DisclosureButton
-                            class="w-full text-slate-300 hover:text-white py-2 px-3 hover:bg-slate-800 rounded-md items-center flex"
+                            class="text-slate-800 w-full hover:text-white py-2 px-3 hover:bg-emerald-500 rounded-md flex items-center"
                         >
-                            <font-awesome-icon
-                                icon="fa-solid fa-angle-down"
+                            <ChevronDownIcon
                                 class="w-6 h-6 mr-2 transition transform"
                                 :class="open ? '' : '-rotate-90'"
                             />
                             <p class="text-sm leading-none">
-                                Incoming —
+                                {{ t("friendPage.incoming") }} —
                                 {{ userStore.getIncomingRequests.length }}
                             </p>
                         </DisclosureButton>
@@ -119,15 +111,14 @@
                         v-slot="{ open }"
                     >
                         <DisclosureButton
-                            class="text-slate-300 w-full hover:text-white py-2 px-3 hover:bg-slate-800 rounded-md flex items-center"
+                            class="text-slate-800 w-full hover:text-white py-2 px-3 hover:bg-emerald-500 rounded-md flex items-center"
                         >
-                            <font-awesome-icon
-                                icon="fa-solid fa-angle-down"
+                            <ChevronDownIcon
                                 class="w-6 h-6 mr-2 transition transform"
                                 :class="open ? '' : '-rotate-90'"
                             />
                             <p class="text-sm leading-none">
-                                Outgoing —
+                                {{ t("friendPage.outgoing") }} —
                                 {{ userStore.getOutgoingRequests.length }}
                             </p>
                         </DisclosureButton>
@@ -158,32 +149,31 @@
                     </Disclosure>
                 </TabPanel>
                 <TabPanel class="focus:outline-none">
-                    <p class="text-slate-300 mb-2">
-                        You can add a friend using their username. It's case
-                        insensitive.
+                    <p class="text-slate-600 mb-2">
+                        {{ t("friendPage.friendAdded") }}
                     </p>
                     <form @submit.prevent="sendFriendRequest">
-                        <div
-                            class="w-full flex rounded-md bg-slate-800 focus-within:ring ring-indigo-500"
-                        >
+                        <div class="w-full flex rounded-md bg-gray-200">
                             <input
                                 @input="setFriendUsername"
                                 :value="friendUsername"
                                 :disabled="isRequestSending"
-                                class="disabled:opacity-60 w-full py-2 pl-2 outline-none bg-transparent"
-                                placeholder="Enter a username"
+                                class="disabled:opacity-60 w-full py-2 pl-2 outline-none bg-transparent text-slate-800"
+                                :placeholder="t('friendPage.enterUsername')"
                             />
                             <button
                                 :disabled="
                                     isRequestSending || !friendUsername.trim()
                                 "
-                                class="disabled:cursor-not-allowed disabled:opacity-70 shrink-0 w-32 h-10 text-center transition flex items-center justify-center leading-none bg-indigo-500 hover:hover:bg-indigo-600 rounded-md m-2"
+                                class="disabled:cursor-not-allowed disabled:opacity-70 shrink-0 w-32 h-10 text-center transition flex items-center justify-center leading-none bg-emerald-500 hover:opacity-80 rounded-md m-2"
                             >
                                 <Spinner
                                     class="w-6 h-6"
                                     v-if="isRequestSending"
                                 />
-                                <span v-else>Send Request</span>
+                                <span v-else>{{
+                                    t("friendPage.sendRequest")
+                                }}</span>
                             </button>
                         </div>
                         <p
@@ -199,7 +189,7 @@
     </div>
 </template>
 <script setup>
-import FriendUser from "@/components/Friends/User.vue";
+import FriendUser from "@/components/friends/User.vue";
 import Spinner from "@/components/icons/Spinner.vue";
 
 import { useChatsStore } from "@/stores/chats";
@@ -214,10 +204,12 @@ import {
     TabPanel,
     TabPanels,
 } from "@headlessui/vue";
+import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { useTitle } from "@vueuse/core";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -228,6 +220,9 @@ useTitle("Friends");
 const friendUsername = ref("");
 const sendFriendRequestError = ref("");
 const isRequestSending = ref(false);
+const { t } = useI18n({
+    inheritLocale: true,
+});
 
 const goHome = () => router.push("/");
 const sendFriendRequest = async () => {

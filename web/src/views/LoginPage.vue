@@ -5,15 +5,14 @@
                 {{ t("loginPage.loggedOutMessage") }}
             </p>
             <TabGroup @change="changeTab">
-                <TabList class="flex space-x-1 rounded-md bg-slate-400 p-1">
+                <TabList class="flex space-x-1 rounded-md bg-gray-300 p-1">
                     <Tab v-slot="{ selected }" class="w-full outline-none">
                         <button
                             :class="[
                                 'w-full outline-none rounded py-2.5 text-md font-medium leading-5 text-white',
-                                'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
                                 selected
-                                    ? 'bg-white/20 shadow font-semibold'
-                                    : 'text-white hover:bg-white/[0.12]',
+                                    ? 'bg-emerald-500 shadow-sm font-semibold'
+                                    : 'text-white hover:bg-gray-300',
                             ]"
                         >
                             {{ t("login") }}
@@ -23,10 +22,9 @@
                         <button
                             :class="[
                                 'w-full outline-none rounded py-2.5 text-md font-medium leading-5 text-white',
-                                'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
                                 selected
-                                    ? 'bg-white/30 shadow font-semibold'
-                                    : 'text-white hover:bg-white/[0.12]',
+                                    ? 'bg-emerald-500 shadow-sm font-semibold'
+                                    : 'text-white hover:bg-gray-300',
                             ]"
                         >
                             {{ t("loginPage.createAccount") }}
@@ -49,7 +47,7 @@
                     </TabPanel>
                     <TabPanel>
                         <div
-                            class="text-lg text-green-400"
+                            class="text-lg text-emerald-400"
                             v-if="isAccountCreated"
                         >
                             <p class="text-center">

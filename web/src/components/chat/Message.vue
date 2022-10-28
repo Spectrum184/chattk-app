@@ -12,7 +12,7 @@
             <div
                 :class="[
                     'rounded-xl py-2 px-3 message',
-                    fromSelf ? 'bg-fuchsia-600' : 'bg-slate-800',
+                    fromSelf ? 'bg-emerald-500' : 'bg-gray-400',
                     fromSelf && error ? 'opacity-70' : '',
                 ]"
             >
@@ -59,7 +59,7 @@
         >
             <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />
             <p class="inline-block ml-2" v-if="error">
-                Your message could not be delivered.
+                {{ t("chatPage.sendMessage") }}
             </p>
         </div>
     </div>
@@ -70,6 +70,7 @@ import MessageStatus from "@/components/chat/MessageStatus.vue";
 import { useFormatTime } from "@/composables/FormatTime";
 import { useMessagesStore } from "@/stores/messages";
 import RetryIcon from "vue-material-design-icons/Refresh.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps([
     "fromSelf",
@@ -84,7 +85,9 @@ const props = defineProps([
 
 const { formattedTime } = useFormatTime(props.time);
 const messagesStore = useMessagesStore();
-
+const { t } = useI18n({
+    inheritLocale: true,
+});
 const resendMessage = () => {
     messagesStore.resendMessage(props.messageId, props.chatId);
 };

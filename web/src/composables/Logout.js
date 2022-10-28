@@ -1,4 +1,4 @@
-import router from "@/router/index";
+import router from "@/router";
 import { useChatsStore } from "@/stores/chats";
 import { useInternalMiscStore } from "@/stores/internalMisc";
 import { useMessagesStore } from "@/stores/messages";

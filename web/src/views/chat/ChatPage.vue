@@ -16,7 +16,7 @@
                         <p class="text-lg leading-none text-slate-800">
                             {{ chatsStore.currentlyOpenChat.name }}
                         </p>
-                        <p class="text-sm leading-none text-slate-300">
+                        <p class="text-sm leading-none text-slate-800">
                             {{ activeStatus }}
                         </p>
                     </div>
@@ -34,7 +34,7 @@
             class="text-center bg-rose-500 text-sm"
             v-if="internalMiscStore.wsNetworkError"
         >
-            Reconnecting...
+            {{ t("chatPage.reconnecting") }}
         </p>
         <div
             class="h-full pt-2 px-2 overflow-y-auto flex flex-col gap-y-1.5 messages-container"
@@ -49,11 +49,11 @@
                     size="lg"
                     :online="chatsStore.currentlyOpenChat.online === true"
                 />
-                <p class="text-xl mt-2">
+                <p class="text-xl mt-2 text-slate-800">
                     {{ chatsStore.currentlyOpenChat.name }}
                 </p>
-                <p class="text-gray-300">
-                    This is the beginning of your conversation.
+                <p class="text-slate-600">
+                    {{ t("chatPage.chatDescription") }}
                 </p>
             </div>
             <div class="flex flex-col gap-y-1 mt-auto relative">
@@ -68,7 +68,7 @@
                 >
                     <RefreshIcon class="h-6 w-6 text-rose-400 mx-auto" />
                     <p class="text-rose-400">
-                        Failed to load messages, click to retry.
+                        {{ t("chatPage.reloadMessage") }}
                     </p>
                 </button>
                 <template
@@ -107,7 +107,7 @@
                 class="absolute bottom-[4rem] left-0 right-0 mx-auto w-16 flex justify-center"
             >
                 <button
-                    class="bg-slate-700 hover:bg-slate-600 transition duration-75 p-1.5 rounded-full"
+                    class="bg-emerald-700 hover:bg-emerald-600 transition duration-75 p-1.5 rounded-full"
                     @click="() => scrollToBottom(true)"
                 >
                     <ArrowSmDownIcon class="w-7 h-7 text-fuchsia-300" />
@@ -125,7 +125,7 @@
             class="w-full px-2 py-3 bg-slate-800 flex items-center text-slate-300"
         >
             <font-awesome-icon icon="fa-solid fa-ban" class="w-5 h-5 mr-2" />
-            <p>You must be friends to exchange messages.</p>
+            <p>{{ t("chatPage.mustFriend") }}</p>
         </div>
     </div>
 </template>
@@ -142,7 +142,7 @@ import { useChatsStore } from "@/stores/chats";
 import { useInternalMiscStore } from "@/stores/internalMisc";
 import { useMessagesStore } from "@/stores/messages";
 import { useUserStore } from "@/stores/user";
-
+import { useI18n } from "vue-i18n";
 import {
     ArrowSmDownIcon,
     RefreshIcon,
@@ -159,7 +159,9 @@ import {
     ref,
     watch,
 } from "vue";
-
+const { t } = useI18n({
+    inheritLocale: true,
+});
 const chatsStore = useChatsStore();
 const userStore = useUserStore();
 const internalMiscStore = useInternalMiscStore();

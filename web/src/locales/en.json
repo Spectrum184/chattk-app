@@ -28,6 +28,25 @@
     },
     "chatPage": {
         "reconnecting": "Reconnecting...",
-        "chat": "Chats"
-    }
+        "chat": "Chats",
+        "chatDescription": "This is the beginning of your conversation.",
+        "reloadMessage": "Failed to load messages, click to retry",
+        "mustFriend": "You must be friends to exchange messages.",
+        "typeMessage": "Type a message",
+        "sendMessage": "Your message could not be delivered."
+    },
+    "friendPage": {
+        "friend": "Friends",
+        "request": "Requests",
+        "addFriend": "Add Friend",
+        "incoming": "Incoming",
+        "outgoing": "Outgoing",
+        "friendAdded": "You can add a friend using their username. It's case insensitive",
+        "sendRequest": "Send Request",
+        "enterUsername": "Enter a username or email",
+        "sureRemove": "Are you sure you want to remove",
+        "sureRemove2": "from your friends? You wont be able to talk with them until you re-friend them."
+    },
+    "remove": "Remove",
+    "cancel": "Cancel"
 }

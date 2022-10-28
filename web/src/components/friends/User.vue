@@ -3,11 +3,11 @@
         :online="online"
         :avatar="avatar"
         :name="username"
-        class="hover:cursor-pointer hover:bg-slate-800"
+        class="hover:cursor-pointer hover:bg-gray-300 bg-gray-200 my-2"
         @click="openChat"
     >
         <template #description>
-            <p class="text-sm text-slate-300">
+            <p class="text-sm text-slate-800">
                 {{ activeStatus }}
             </p>
         </template>
@@ -16,14 +16,10 @@
                 <button
                     :disabled="removeFriendLoading"
                     v-if="type === 'Friend'"
-                    class="disabled:cursor-not-allowed transition bg-transparent hover:bg-emerald-800/70 rounded-full p-2 text-emerald-600 hover:text-emerald-400"
+                    class="disabled:cursor-not-allowed transition bg-transparent rounded-full p-2 text-emerald-500 hover:text-emerald-400"
                 >
                     <Spinner v-if="openChatLoading" class="w-6 h-6" />
-                    <font-awesome-icon
-                        v-else
-                        icon="fa-solid fa-message"
-                        class="w-6 h-6"
-                    />
+                    <ChatAltIcon v-else class="w-6 h-6" />
                 </button>
                 <button
                     v-if="type === 'Incoming'"
@@ -31,31 +27,23 @@
                         acceptFriendRequestLoading || removeFriendLoading
                     "
                     @click.stop="acceptFriendRequest"
-                    class="disabled:cursor-not-allowed transition bg-transparent hover:bg-emerald-800/70 rounded-full p-2 text-emerald-600 hover:text-emerald-400"
+                    class="disabled:cursor-not-allowed transition bg-transparent rounded-full p-2 text-emerald-500 hover:text-emerald-400"
                 >
                     <Spinner
                         class="w-6 h-6"
                         v-if="acceptFriendRequestLoading"
                     />
-                    <font-awesome-icon
-                        v-else
-                        icon="fa-solid fa-check"
-                        class="w-6 h-6"
-                    />
+                    <CheckCircleIcon v-else class="w-6 h-6" />
                 </button>
                 <button
                     @click.stop="deleteFriend"
                     :disabled="
                         removeFriendLoading || acceptFriendRequestLoading
                     "
-                    class="disabled:cursor-not-allowed transition bg-transparent focus:outline-none focus-visible:ring ring-red-400 hover:bg-red-800/40 rounded-full p-2 text-red-500 hover:text-red-400"
+                    class="disabled:cursor-not-allowed transition bg-transparent rounded-full p-2 text-red-500 hover:text-red-400"
                 >
                     <spinner v-if="removeFriendLoading" class="w-6 h-6" />
-                    <font-awesome-icon
-                        v-else
-                        icon="fa-solid fa-xmark"
-                        class="w-6 h-6"
-                    />
+                    <XCircleIcon v-else class="w-6 h-6" />
                 </button>
             </div>
             <TransitionRoot
@@ -94,51 +82,52 @@
                                 leave-to="opacity-0 scale-95"
                             >
                                 <DialogPanel
-                                    class="w-full max-w-md transform overflow-hidden rounded-md bg-gray-700 text-left align-middle shadow-xl transition-all"
+                                    class="w-full max-w-md transform overflow-hidden rounded-md bg-gray-200 text-left align-middle shadow-xl transition-all"
                                 >
                                     <DialogTitle
                                         as="h3"
-                                        class="text-xl font-medium leading-6 text-slate-100 px-4 pt-4"
+                                        class="text-xl font-medium leading-6 text-slate-800 px-4 pt-4"
                                     >
-                                        Remove
-                                        <span class="font-semibold"
-                                            >'{{ username }}'</span
+                                        {{ t("remove") }}
+                                        <span class="font-semibold">{{
+                                            username
+                                        }}</span
                                         >?
                                     </DialogTitle>
                                     <div class="mt-2 px-4">
-                                        <p class="leading-snug text-slate-300">
-                                            Are you sure you want to remove
+                                        <p class="leading-snug text-slate-700">
+                                            {{ t("friendPage.sureRemove") }}
                                             <span class="font-bold">{{
                                                 username
                                             }}</span>
-                                            from your friends? You wont be able
-                                            to talk with them until you
-                                            re-friend them.
+                                            {{ t("friendPage.sureRemove2") }}
                                         </p>
                                     </div>
 
                                     <div
-                                        class="mt-4 flex gap-3 justify-end bg-gray-800/40 p-2"
+                                        class="mt-4 flex gap-3 justify-end bg-gray-300 p-2"
                                     >
                                         <button
                                             type="button"
                                             :disabled="removeFriendLoading"
-                                            class="disabled:cursor-not-allowed disabled:opacity-70 transition py-2 px-4 focus:outline-none rounded-md text-slate-200 hover:bg-gray-600/80 focus-visible:ring ring-fuchsia-400"
+                                            class="disabled:cursor-not-allowed disabled:opacity-70 transition py-2 px-4 focus:outline-none rounded-md text-slate-100 hover:bg-gray-600/80"
                                             @click="closeRemoveConfirmation"
                                         >
-                                            Cancel
+                                            {{ t("cancel") }}
                                         </button>
                                         <button
                                             type="button"
                                             :disabled="removeFriendLoading"
-                                            class="disabled:cursor-not-allowed disabled:opacity-70 w-24 flex items-center justify-center transition transform p-2 focus:outline-none rounded-md text-slate-200 bg-red-500 hover:bg-red-400 hover:text-white focus-visible:ring ring-red-400"
+                                            class="disabled:cursor-not-allowed disabled:opacity-70 w-24 flex items-center justify-center transition transform p-2 focus:outline-none rounded-md text-slate-100 bg-red-500 hover:bg-red-400 hover:text-white"
                                             @click="removeFriend"
                                         >
                                             <Spinner
                                                 v-if="removeFriendLoading"
                                                 class="w-6 h-6"
                                             />
-                                            <span v-else>Remove</span>
+                                            <span v-else>{{
+                                                t("remove")
+                                            }}</span>
                                         </button>
                                     </div>
                                 </DialogPanel>
@@ -153,8 +142,12 @@
 <script setup>
 import User from "@/components/user/User.vue";
 import Spinner from "@/components/icons/Spinner.vue";
+import {
+    ChatAltIcon,
+    CheckCircleIcon,
+    XCircleIcon,
+} from "@heroicons/vue/outline";
 import { useActiveStatusRef } from "@/composables/ActiveStatus";
-import { useChatsStore } from "@/stores/chats";
 import { useUserStore } from "@/stores/user";
 import {
     Dialog,
@@ -166,6 +159,7 @@ import {
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps([
     "username",
@@ -178,10 +172,11 @@ const props = defineProps([
 
 const router = useRouter();
 const userStore = useUserStore();
-const chatsStore = useChatsStore();
 const toast = useToast();
 const { activeStatus } = useActiveStatusRef(computed(() => props.online));
-
+const { t } = useI18n({
+    inheritLocale: true,
+});
 const acceptFriendRequestLoading = ref(false);
 const openChatLoading = ref(false);
 const removeFriendLoading = ref(false);

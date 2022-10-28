@@ -13,7 +13,7 @@
         <div
             v-show="online && typeof online !== 'string'"
             :class="[
-                'bg-green-500 rounded-full ring absolute',
+                'bg-emerald-500 rounded-full ring absolute',
                 hasFocus ? 'ring-slate-800' : 'ring-slate-900',
                 onlineStatusClasses,
             ]"

@@ -6,6 +6,9 @@ module.exports = {
             fontFamily: {
                 sans: "poppins, sans-serif",
             },
+            height: {
+                layout: "calc(100vh - 56px)",
+            },
         },
     },
     variants: {

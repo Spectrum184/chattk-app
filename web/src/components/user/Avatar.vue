@@ -3,7 +3,7 @@
         <img
             :src="
                 avatar ||
-                'https://static.wikia.nocookie.net/oneshot/images/0/02/Niko.png/'
+                'https://res.cloudinary.com/thanhtk/image/upload/v1666446309/1400173657.kougyou_tiddeee__1022x1024__rk5jlz.jpg'
             "
             class="rounded-full"
             :height="sizePx"

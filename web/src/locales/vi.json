@@ -25,5 +25,9 @@
     },
     "homePage": {
         "mainMessage": "Thêm bạn bè để bắt đầu cuộc trò chuyện!."
+    },
+    "chatPage": {
+        "reconnecting": "Đang kết nối lại",
+        "chat": "Chat"
     }
 }

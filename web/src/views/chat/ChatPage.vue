@@ -1,27 +1,9 @@
 <template>
     <div class="flex flex-col h-full w-full relative">
         <div
-            class="h-12 shrink-0 w-full self-start flex flex-wrap justify-between items-center p-2 bottom-shadow"
+            class="h-14 shrink-0 w-full self-start flex flex-wrap justify-between items-center px-2 shadow-sm border-b"
         >
-            <div class="flex items-center h-full">
-                <button
-                    @click="emit('toggleSideBar')"
-                    class="hidden md:inline-block mr-2 leading-none text-emerald-600 hover:text-emerald-500 p-1"
-                >
-                    <font-awesome-icon
-                        icon="fa-solid fa-bars"
-                        class="w-5 h-5"
-                    />
-                </button>
-                <button
-                    @click="goHome"
-                    class="md:hidden mr-2 leading-none text-emerald-600 hover:text-emerald-500 p-1"
-                >
-                    <font-awesome-icon
-                        icon="fa-solid fa-arrow-left"
-                        class="w-5 h-5"
-                    />
-                </button>
+            <div class="flex items-center h-full w-full justify-between">
                 <div
                     class="flex items-center"
                     v-if="chatsStore.currentlyOpenChat"
@@ -31,13 +13,20 @@
                         :online="chatsStore.currentlyOpenChat.online === true"
                     />
                     <div class="ml-2">
-                        <p class="text-lg leading-none">
+                        <p class="text-lg leading-none text-slate-800">
                             {{ chatsStore.currentlyOpenChat.name }}
                         </p>
                         <p class="text-sm leading-none text-slate-300">
                             {{ activeStatus }}
                         </p>
                     </div>
+                </div>
+                <div class="flex items-center">
+                    <button class="hover:opacity-80">
+                        <InformationCircleIcon
+                            class="h-6 w-6 text-emerald-500 mx-auto"
+                        />
+                    </button>
                 </div>
             </div>
         </div>
@@ -63,7 +52,9 @@
                 <p class="text-xl mt-2">
                     {{ chatsStore.currentlyOpenChat.name }}
                 </p>
-                <p class="text-gray-300 ">This is the beginning of your conversation.</p>
+                <p class="text-gray-300">
+                    This is the beginning of your conversation.
+                </p>
             </div>
             <div class="flex flex-col gap-y-1 mt-auto relative">
                 <Spinner
@@ -107,7 +98,7 @@
                     class="w-6 h-6 shrink-0 mr-auto ml-auto my-2"
                 />
             </div>
-            <TypingIndicator v-show="chatsStore.currentChatIsTyping"/>
+            <TypingIndicator v-show="chatsStore.currentChatIsTyping" />
         </div>
 
         <transition name="slide-fade">
@@ -145,7 +136,6 @@ import Message from "@/components/chat/Message.vue";
 import MessageInput from "@/components/chat/MessageInput.vue";
 import Spinner from "@/components/icons/Spinner.vue";
 import TypingIndicator from "@/components/chat/TypingIndicator.vue";
-
 import { useActiveStatusRef } from "@/composables/ActiveStatus";
 
 import { useChatsStore } from "@/stores/chats";
@@ -153,9 +143,13 @@ import { useInternalMiscStore } from "@/stores/internalMisc";
 import { useMessagesStore } from "@/stores/messages";
 import { useUserStore } from "@/stores/user";
 
-import { ArrowSmDownIcon, RefreshIcon } from "@heroicons/vue/outline";
+import {
+    ArrowSmDownIcon,
+    RefreshIcon,
+    InformationCircleIcon,
+} from "@heroicons/vue/outline";
 
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useTitle } from "@vueuse/core";
 import {
     computed,
@@ -172,7 +166,6 @@ const internalMiscStore = useInternalMiscStore();
 const messagesStore = useMessagesStore();
 
 const route = useRoute();
-const router = useRouter();
 const { activeStatus } = useActiveStatusRef(
     computed(() => chatsStore.currentlyOpenChat?.online)
 );
@@ -312,12 +305,13 @@ const autoScrollToBottomButtonHandler = (event) => {
 };
 
 const scrollToBottom = (smooth) => {
-    const reducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches
-    messagesContainer.value.scrollTo({ top: messagesContainer.value.scrollHeight, behavior: smooth && !reducedMotion ? 'smooth' : 'instant' });
-};
-
-const goHome = () => {
-    router.push("/");
+    const reducedMotion = window.matchMedia(
+        `(prefers-reduced-motion: reduce)`
+    ).matches;
+    messagesContainer.value.scrollTo({
+        top: messagesContainer.value.scrollHeight,
+        behavior: smooth && !reducedMotion ? "smooth" : "instant",
+    });
 };
 
 const emit = defineEmits(["toggleSideBar"]);
@@ -361,12 +355,18 @@ watch(
     }
 );
 
-watch(() => chatsStore.currentChatIsTyping, (newVal) => {
-    const shouldScroll = Math.abs(
-            messagesContainer.value.scrollHeight - messagesContainer.value.clientHeight - messagesContainer.value.scrollTop
-        ) < 30;    
-    if(newVal && shouldScroll) nextTick(() => scrollToBottom(true)) 
-});
+watch(
+    () => chatsStore.currentChatIsTyping,
+    (newVal) => {
+        const shouldScroll =
+            Math.abs(
+                messagesContainer.value.scrollHeight -
+                    messagesContainer.value.clientHeight -
+                    messagesContainer.value.scrollTop
+            ) < 30;
+        if (newVal && shouldScroll) nextTick(() => scrollToBottom(true));
+    }
+);
 
 internalMiscStore.$onAction(({ after, name, args: disconnected }) => {
     if (name === "setWsNetworkError")
@@ -421,6 +421,5 @@ internalMiscStore.$onAction(({ after, name, args: disconnected }) => {
 .slide-fade-leave-to {
     transform: translateY(20px);
     opacity: 0;
-
 }
 </style>

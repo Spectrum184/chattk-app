@@ -6,24 +6,32 @@
         <User
             :name="name"
             :online="online"
-            :class="[ 'hover:cursor-pointer', isOpen ? 'md:bg-slate-700/60' : 'hover:bg-slate-800' ]"
+            :class="[
+                'hover:cursor-pointer text-slate-800',
+                isOpen ? 'md:bg-gray-300' : 'hover:bg-gray-200',
+            ]"
             :nameEllipsis="true"
         >
             <template #content-top-right>
-                <p class="text-sm whitespace-nowrap text-gray-300/90 ml-auto">{{ formattedTime }}</p>
+                <p class="text-sm whitespace-nowrap text-slate-700 ml-auto">
+                    {{ formattedTime }}
+                </p>
             </template>
             <template #description>
                 <div class="flex text-sm">
                     <p
-                        class="text-ellipsis overflow-hidden whitespace-nowrap text-gray-300/90"
+                        class="text-ellipsis overflow-hidden whitespace-nowrap text-slate-500"
                     >
-                        <span class="font-medium"> {{ lastMessageFromSelf ? "You:" : "" }} </span> {{ lastMessage }}
+                        <span class="font-medium">
+                            {{ lastMessageFromSelf ? "You:" : "" }}
+                        </span>
+                        {{ lastMessage }}
                     </p>
-                    <div class="ml-auto text-gray-300/90">
+                    <div class="ml-auto text-slate-500">
                         <MessageStatus
-                        :from-self="lastMessageFromSelf"
-                        :sending="lastMessageSending"
-                        :error="lastMessageError"
+                            :from-self="lastMessageFromSelf"
+                            :sending="lastMessageSending"
+                            :error="lastMessageError"
                         />
                     </div>
                 </div>
@@ -36,12 +44,9 @@
 import User from "@/components/user/User.vue";
 import MessageStatus from "@/components/chat/MessageStatus.vue";
 import { useFormatTime } from "@/composables/FormatTime";
-import { useUserStore } from "@/stores/user";
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
-
 const emit = defineEmits(["chatClicked"]);
-const userStore = useUserStore();
 
 const props = defineProps([
     "name",

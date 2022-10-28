@@ -25,5 +25,9 @@
     },
     "homePage": {
         "mainMessage": "Add friend to start a conversation!."
+    },
+    "chatPage": {
+        "reconnecting": "Reconnecting...",
+        "chat": "Chats"
     }
 }

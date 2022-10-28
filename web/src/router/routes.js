@@ -15,7 +15,7 @@ export const routes = [
                 component: HomeView,
             },
             {
-                path: "/i/:id",
+                path: "/m/:id",
                 name: "chat",
                 component: ChatPage,
                 meta: {

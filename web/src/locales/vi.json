@@ -22,5 +22,8 @@
         "validateEmail": "Vui lòng nhập đúng định dạng email",
         "validateLengthUsername": "Tên đăng nhập dài từ 3 đến 30 kí tự",
         "validateLengthPassword": "Mật khẩu dài từ 8 đến 72 kí tự"
+    },
+    "homePage": {
+        "mainMessage": "Thêm bạn bè để bắt đầu cuộc trò chuyện!."
     }
 }

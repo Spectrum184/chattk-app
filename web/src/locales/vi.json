@@ -17,8 +17,10 @@
         "reenterPassword": "Nhập lại mật khẩu",
         "validateUsernameMessage": "Tên đăng nhập chỉ được dùng chữ cái không dấu, dấu gạch ngang, gạch chân hoặc số.",
         "validatePasswordMessage": "Mật khẩu chỉ chứa các chữ cái không dấu, số và một số ký tự đặc biệt.",
-        "confirm": "Mật khẩu xác nhận",
-        "validateRequired": "cần thiết",
-        "validateEmail": "Vui lòng nhập đúng định dạng email"
+        "confirm": "Mật khẩu xác nhận không trùng!",
+        "validateRequired": "Vui lòng nhập",
+        "validateEmail": "Vui lòng nhập đúng định dạng email",
+        "validateLengthUsername": "Tên đăng nhập dài từ 3 đến 30 kí tự",
+        "validateLengthPassword": "Mật khẩu dài từ 8 đến 72 kí tự"
     }
 }

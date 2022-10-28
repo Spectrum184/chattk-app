@@ -17,8 +17,10 @@
         "reenterPassword": "Re-enter your password",
         "validateUsernameMessage": "Username can only contain english letters, numbers, hyphens and underscores.",
         "validatePasswordMessage": "Password can only english contain letters, numbers and some special characters.",
-        "confirm": "Confirmation",
-        "validateRequired": "{{}}is required!",
-        "validateEmail": "Please enter the correct email format!"
+        "confirm": "Confirmation password is not match!",
+        "validateRequired": "This field is required!",
+        "validateEmail": "Please enter the correct email format!",
+        "validateLengthUsername": "Username between the 3-30 characters",
+        "validateLengthPassword": "Password between the 7-72 characters"
     }
 }

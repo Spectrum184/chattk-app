@@ -1,5 +1,4 @@
 import { convertMongoObj } from "@/common/helper";
-import { MONGODB_PROVIDER } from "@/constants";
 import { CreateUserDto } from "@/dto/auth.dto";
 import { OnlineSocketsList } from "@/dto/chat.dto";
 import { AddFriendDto, RemoveFriendDto } from "@/dto/user.dto";
@@ -28,7 +27,6 @@ import { UsersRepository } from "./users.repository";
 @Injectable()
 export class UsersService {
     constructor(
-        @Inject(MONGODB_PROVIDER)
         private configService: ConfigService,
         @InjectPinoLogger(UsersService.name)
         private logger: PinoLogger,

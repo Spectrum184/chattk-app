@@ -1,11 +1,11 @@
 <template>
     <div class="h-full w-full flex">
-        <div class="m-auto w-[400px] p-6 rounded shadow-md">
+        <div class="m-auto w-[400px] p-6 rounded shadow-lg border">
             <p class="text-rose-400" v-if="isLoggedOut">
                 {{ t("loginPage.loggedOutMessage") }}
             </p>
             <TabGroup @change="changeTab">
-                <TabList class="flex space-x-1 rounded-md bg-emerald-500 p-1">
+                <TabList class="flex space-x-1 rounded-md bg-slate-400 p-1">
                     <Tab v-slot="{ selected }" class="w-full outline-none">
                         <button
                             :class="[
@@ -114,7 +114,11 @@ async function createAccount(credentials) {
     isFormSubmitting.value = true;
     clearErrors("signupForm");
     userStore
-        .createAccount(credentials.username, credentials.password)
+        .createAccount(
+            credentials.username,
+            credentials.password,
+            credentials.email
+        )
         .then((message) => {
             if (!message.ok) {
                 if (message.toLowerCase().includes("username")) {

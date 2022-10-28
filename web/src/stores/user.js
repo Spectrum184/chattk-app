@@ -69,11 +69,12 @@ export const useUserStore = defineStore({
                     return formatAxiosError(e);
                 });
         },
-        async createAccount(username, password) {
+        async createAccount(username, password, email) {
             return axios
                 .post(`${import.meta.env.VITE_API_URL}/auth/signup`, {
                     username,
                     password,
+                    email,
                 })
                 .then((res) => {
                     return { ok: true };

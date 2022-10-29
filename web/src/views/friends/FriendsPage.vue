@@ -224,7 +224,6 @@ const { t } = useI18n({
     inheritLocale: true,
 });
 
-const goHome = () => router.push("/");
 const sendFriendRequest = async () => {
     isRequestSending.value = true;
     const response = await userStore.sendFriendRequest(

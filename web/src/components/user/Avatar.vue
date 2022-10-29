@@ -13,17 +13,16 @@
         <div
             v-show="online && typeof online !== 'string'"
             :class="[
-                'bg-emerald-500 rounded-full ring absolute',
-                hasFocus ? 'ring-slate-800' : 'ring-slate-900',
+                'bg-emerald-500 rounded-full absolute border border-emerald-600',
                 onlineStatusClasses,
             ]"
-        ></div>
+        />
     </div>
 </template>
 <script setup>
 import { computed } from "vue";
 
-const props = defineProps(["online", "avatar", "hasFocus", "size"]);
+const props = defineProps(["online", "avatar", "size"]);
 
 const sizePx = computed(() => {
     if (props.size === "xs") {

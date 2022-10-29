@@ -1,11 +1,52 @@
 {
-    "hello": "こんにちは、世界",
-    "login": "ログイン",
+    "hello": "Hello!",
+    "login": "Log In",
+    "password": "Username",
+    "username": "Password",
+    "email": "Email",
     "loginPage": {
         "loggedOutMessage": "You've been logged out.",
         "createAccount": "Create An Account",
         "loginSuccess": "Your account has been created! login using your username and password to get started.",
         "enterUsername": "Enter your username",
-        "enterPassword": "Enter your password"
-    }
+        "enterPassword": "Enter your password",
+        "loggingIn": "Logging In...",
+        "creatingAccount": "Creating account...",
+        "createAcc": "Create Account",
+        "confirmPassword": "Confirm password",
+        "reenterPassword": "Re-enter your password",
+        "validateUsernameMessage": "Username can only contain english letters, numbers, hyphens and underscores.",
+        "validatePasswordMessage": "Password can only english contain letters, numbers and some special characters.",
+        "confirm": "Confirmation password is not match!",
+        "validateRequired": "This field is required!",
+        "validateEmail": "Please enter the correct email format!",
+        "validateLengthUsername": "Username between the 3-30 characters",
+        "validateLengthPassword": "Password between the 7-72 characters"
+    },
+    "homePage": {
+        "mainMessage": "Add friend to start a conversation!."
+    },
+    "chatPage": {
+        "reconnecting": "Reconnecting...",
+        "chat": "Chats",
+        "chatDescription": "This is the beginning of your conversation.",
+        "reloadMessage": "Failed to load messages, click to retry",
+        "mustFriend": "You must be friends to exchange messages.",
+        "typeMessage": "Type a message",
+        "sendMessage": "Your message could not be delivered."
+    },
+    "friendPage": {
+        "friend": "Friends",
+        "request": "Requests",
+        "addFriend": "Add Friend",
+        "incoming": "Incoming",
+        "outgoing": "Outgoing",
+        "friendAdded": "You can add a friend using their username. It's case insensitive",
+        "sendRequest": "Send Request",
+        "enterUsername": "Enter a username or email",
+        "sureRemove": "Are you sure you want to remove",
+        "sureRemove2": "from your friends? You wont be able to talk with them until you re-friend them."
+    },
+    "remove": "Remove",
+    "cancel": "Cancel"
 }

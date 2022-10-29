@@ -7,7 +7,7 @@
             <div :class="['md:text-lg flex shrink-0']">
                 <span
                     :class="[
-                        'leading-none text-slate-800',
+                        'leading-none text-emerald-500',
                         nameEllipsis
                             ? 'text-ellipsis overflow-hidden whitespace-nowrap'
                             : 'break-all',

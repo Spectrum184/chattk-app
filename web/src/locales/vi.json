@@ -24,7 +24,9 @@
         "validateLengthPassword": "Mật khẩu dài từ 8 đến 72 kí tự"
     },
     "homePage": {
-        "mainMessage": "Thêm bạn bè để bắt đầu cuộc trò chuyện!."
+        "mainMessage": "Thêm bạn bè để bắt đầu cuộc trò chuyện!.",
+        "profile": "Trang cá nhân",
+        "logout": "Đăng xuất"
     },
     "chatPage": {
         "reconnecting": "Đang kết nối lại",

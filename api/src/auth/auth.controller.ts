@@ -13,6 +13,7 @@ import {
     Post,
     Req,
     UseGuards,
+    Ip,
 } from "@nestjs/common";
 import { Request } from "express";
 import { AuthService } from "./auth.service";
@@ -28,9 +29,10 @@ export class AuthController {
     @Post("login")
     @HttpCode(200)
     @UseGuards(LoginGuard)
-    async login(@Req() req: Request) {
+    async login(@Req() req: Request, @Ip() ipAddress: string) {
         const session = await this.authService.createSession(
             req.user.id,
+            ipAddress,
             req.user.sessionName
         );
 

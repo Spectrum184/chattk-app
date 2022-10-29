@@ -4,6 +4,7 @@ export interface Session {
     userId: string;
     expiresAt: Date;
     name?: string;
+    ip?: string;
 }
 export interface SessionDoc extends Omit<Session, "id"> {
     _id: string;

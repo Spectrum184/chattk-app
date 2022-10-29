@@ -85,6 +85,7 @@ export class AuthService {
 
     async createSession(
         userId: string,
+        ip: string,
         name?: string
     ): Promise<{ id: string; token: string }> {
         const token = await nanoid(50);
@@ -96,6 +97,7 @@ export class AuthService {
                 (Date.now() + this.config.get("sessionMaxAge")) as number
             ),
             token,
+            ip,
         };
         if (name) doc.name = name;
         await this.authRepository.insertSession(doc);

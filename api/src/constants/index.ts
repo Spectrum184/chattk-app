@@ -7,3 +7,4 @@ export const SESSIONS_COLLECTION = "sessions";
 export const ULID_PATTERN = /^[0-9A-HJKMNP-TV-Z]*$/i; // CREDITS: https://github.com/yuzu441/is-ulid/blob/master/src/IsULID.ts
 export const USERNAME_PATTERN = /^[a-zA-Z_0-9\-]*$/;
 export const PASSWORD_PATTERN = /^[\w&.\-!?@#$%^&*]*$/;
+export const USER_INFO_COLLECTION = "usersInfo";

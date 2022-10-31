@@ -5,6 +5,7 @@ import {
     USERS_COLLECTION,
     SESSIONS_COLLECTION,
     REDIS_PROVIDER,
+    USER_INFO_COLLECTION,
 } from "@/constants";
 import { MongoDB } from "@/database/database.interface";
 import { ChatDoc, MessageDoc } from "@/models/chat.model";
@@ -13,6 +14,7 @@ import { ConfigService } from "@nestjs/config";
 import { MongoClient } from "mongodb";
 import { SessionDoc } from "@/models/session.model";
 import Redis from "ioredis";
+import { UserInfoDoc } from "@/models/user-info.model";
 
 export const databaseProviders = [
     {
@@ -28,6 +30,7 @@ export const databaseProviders = [
                 chats: db.collection<ChatDoc>(CHATS_COLLECTION),
                 messages: db.collection<MessageDoc>(MESSAGES_COLLECTION),
                 sessions: db.collection<SessionDoc>(SESSIONS_COLLECTION),
+                userInfo: db.collection<UserInfoDoc>(USER_INFO_COLLECTION),
             };
         },
         inject: [ConfigService],

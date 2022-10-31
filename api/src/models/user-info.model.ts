@@ -8,11 +8,13 @@ export interface UserInfo {
     firstName: string;
     lastName: string;
     userId: string;
-    phone: string;
-    facebook: string;
-    twitter: string;
-    birthday: Date;
-    updatedAt: Date;
+    phone?: string;
+    facebook?: string;
+    twitter?: string;
+    birthday?: Date;
+    avatar: string;
+    bio?: string;
+    updatedAt?: Date;
 }
 
 export interface UserInfoDoc extends Omit<UserInfo, "id"> {
@@ -28,5 +30,7 @@ export const userInfoProjection = {
     facebook: 1,
     twitter: 1,
     birthday: 1,
+    bio: 1,
+    avatar: 1,
     updatedAt: 1,
 };

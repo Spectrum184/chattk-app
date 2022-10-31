@@ -2,7 +2,7 @@ import { AuthenticatedGuard } from "@/common/guards/authenticated.guard";
 import { UlidValidatorPipe } from "@/common/pipes/ulid-validator.pipe";
 import {
     GetMessagesQueryDto,
-    messageDto,
+    MessageDto,
     SaveDirectMessageResponseDto,
 } from "@/dto/chat.dto";
 import { Message } from "@/models/chat.model";
@@ -33,7 +33,7 @@ export class ChatController {
     async saveDirectMessage(
         @Req() req: Request,
         @Param("chatId", new UlidValidatorPipe()) chatId: string,
-        @Body() body: messageDto
+        @Body() body: MessageDto
     ): Promise<SaveDirectMessageResponseDto> {
         const data = await this.chatService.saveDirectMessage(
             req.user.id,

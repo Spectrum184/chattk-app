@@ -1,5 +1,6 @@
 import { ChatDoc, MessageDoc } from "@/models/chat.model";
 import { SessionDoc } from "@/models/session.model";
+import { UserInfoDoc } from "@/models/user-info.model";
 import { UserDoc } from "@/models/user.model";
 import { Collection, Db, MongoClient } from "mongodb";
 
@@ -10,4 +11,5 @@ export interface MongoDB {
     chats: Collection<ChatDoc>;
     messages: Collection<MessageDoc>;
     sessions: Collection<SessionDoc>;
+    userInfo: Collection<UserInfoDoc>;
 }

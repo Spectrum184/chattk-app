@@ -16,6 +16,7 @@ const usersColl = db.collection("users");
 const chatsColl = db.collection("chats");
 const messagesColl = db.collection("messages");
 const sessionsColl = db.collection("sessions");
+const userInfoColl = db.collection("usersInfo");
 
 console.log("Creating indexes....");
 await usersColl.createIndex(
@@ -37,5 +38,6 @@ await sessionsColl.createIndex({ token: 1 }, { unique: true });
 await sessionsColl.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 await chatsColl.createIndex({ "recipients.id": 1, chatType: 1 });
 await messagesColl.createIndex({ chatId: 1, _id: -1 });
+await userInfoColl.createIndex({ userId: 1 });
 console.log("Done!");
 await mongo.close();

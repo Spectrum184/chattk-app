@@ -7,7 +7,7 @@ import { UsersService } from "./users.service";
 @Module({
     imports: [WebsocketModule],
     providers: [UsersService, UsersRepository],
-    exports: [UsersService],
+    exports: [UsersService, UsersRepository],
     controllers: [UsersController],
 })
 export class UsersModule {}

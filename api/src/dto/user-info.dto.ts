@@ -58,6 +58,15 @@ export class UserInfoDto {
     bio?: string;
 }
 
+export class FindUserInfoParam {
+    @IsString()
+    @Transform(({ value }: TransformFnParams) =>
+        typeof value === "string" ? value?.trim() : value
+    )
+    @MinLength(1)
+    username: string;
+}
+
 export const userInfoDefaultDto = {
     id: "",
     lastName: "",

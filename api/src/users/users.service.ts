@@ -142,6 +142,7 @@ export class UsersService {
                                 username: receiverUser.username,
                             },
                             message: UserError.requestAccepted,
+                            type: UserType.requestAccepted,
                         };
                     return {
                         user: {
@@ -150,6 +151,7 @@ export class UsersService {
                         },
                         chat: convertMongoObj(chat),
                         message: UserError.requestAccepted,
+                        type: UserType.requestAccepted,
                     };
             }
         }
@@ -166,6 +168,7 @@ export class UsersService {
                 username: receiverUser.username,
             },
             message: UserError.requestSent,
+            type: UserType.requestSent,
         };
     }
 

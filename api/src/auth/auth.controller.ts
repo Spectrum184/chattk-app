@@ -15,7 +15,7 @@ import {
     UseGuards,
     Ip,
 } from "@nestjs/common";
-import { Request } from "express";
+import { FastifyRequest } from "fastify";
 import { AuthService } from "./auth.service";
 
 @Controller("auth")
@@ -29,7 +29,7 @@ export class AuthController {
     @Post("login")
     @HttpCode(200)
     @UseGuards(LoginGuard)
-    async login(@Req() req: Request, @Ip() ipAddress: string) {
+    async login(@Req() req: FastifyRequest, @Ip() ipAddress: string) {
         const session = await this.authService.createSession(
             req.user.id,
             ipAddress,
@@ -46,7 +46,7 @@ export class AuthController {
 
     @Get("user")
     @UseGuards(AuthenticatedGuard)
-    user(@Req() req: Request) {
+    user(@Req() req: FastifyRequest) {
         return {
             id: req.user.id,
             username: req.user.username,
@@ -56,7 +56,7 @@ export class AuthController {
     @Delete("logout")
     @UseGuards(AuthenticatedGuard)
     @HttpCode(HttpStatus.NO_CONTENT)
-    async logout(@Req() req: Request): Promise<void> {
+    async logout(@Req() req: FastifyRequest): Promise<void> {
         await this.authService.deleteSession(req.user.sessionId);
         this.websocketService.logoutSession(req.user.sessionId);
     }

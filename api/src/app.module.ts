@@ -9,6 +9,7 @@ import { config, validate } from "./config";
 import { DatabaseModule } from "@/database/database.module";
 import { UsersModule } from "@/users/users.module";
 import { WebsocketModule } from "@/websocket/websocket.module";
+import { UserInfoModule } from "./user-info/user-info.module";
 
 @Module({
     imports: [
@@ -62,6 +63,7 @@ import { WebsocketModule } from "@/websocket/websocket.module";
         ChatModule,
         DatabaseModule,
         WebsocketModule,
+        UserInfoModule,
     ],
 })
 export class AppModule {}

@@ -1,8 +1,8 @@
 import { UserNoProfile } from "@/models/user.model";
-import { Request } from "express";
+import { FastifyRequest } from "fastify";
 
-declare module "express" {
-    interface Request {
+declare module "fastify" {
+    interface FastifyRequest {
         user: UserNoProfile & {
             sessionName?: string | undefined;
             sessionId: string;

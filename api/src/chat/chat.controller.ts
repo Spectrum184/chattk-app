@@ -17,7 +17,7 @@ import {
     Req,
     UseGuards,
 } from "@nestjs/common";
-import { Request } from "express";
+import { FastifyRequest } from "fastify";
 
 import { ChatService } from "./chat.service";
 
@@ -31,7 +31,7 @@ export class ChatController {
 
     @Post("/:chatId/messages")
     async saveDirectMessage(
-        @Req() req: Request,
+        @Req() req: FastifyRequest,
         @Param("chatId", new UlidValidatorPipe()) chatId: string,
         @Body() body: MessageDto
     ): Promise<SaveDirectMessageResponseDto> {
@@ -50,7 +50,7 @@ export class ChatController {
 
     @Get("/:chatId/messages")
     async getMessages(
-        @Req() req: Request,
+        @Req() req: FastifyRequest,
         @Param("chatId", new UlidValidatorPipe()) chatId: string,
         @Query() query: GetMessagesQueryDto
     ): Promise<Message[]> {

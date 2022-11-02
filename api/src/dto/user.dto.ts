@@ -25,6 +25,7 @@ export interface AddFriendDto {
     };
     message: string;
     chat?: Chat;
+    type?: string;
 }
 
 export interface RemoveFriendDto {

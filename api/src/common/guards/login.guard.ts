@@ -4,7 +4,6 @@ import {
     ExecutionContext,
     HttpStatus,
     Injectable,
-    Logger,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { plainToInstance } from "class-transformer";
@@ -13,11 +12,12 @@ import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 
 @Injectable()
 export class LoginGuard extends AuthGuard("local") {
-
     constructor(
         @InjectPinoLogger(LoginGuard.name)
         private logger: PinoLogger
-    ) { super() }
+    ) {
+        super();
+    }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();

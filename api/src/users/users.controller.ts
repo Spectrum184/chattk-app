@@ -17,7 +17,8 @@ import {
     Req,
     UseGuards,
 } from "@nestjs/common";
-import { Request } from "express";
+import { FastifyRequest } from "fastify";
+import { UserType } from "./users.constants";
 import { UsersService } from "./users.service";
 
 @UseGuards(AuthenticatedGuard)
@@ -32,14 +33,14 @@ export class UsersController {
     async addFriend(
         @Param() params: AddFriendParamsDto,
         @Query() query: AddFriendQueryDto,
-        @Req() req: Request
+        @Req() req: FastifyRequest
     ): Promise<AddFriendResponseDto> {
         const result = await this.usersService.addFriend(
             params.usernameOrId,
             req.user,
             query.type === "id"
         );
-        if (result.message === "Friend request accepted.") {
+        if (result.type === UserType.requestAccepted) {
             this.websocketService.emitFriendAdded(
                 req.user.id,
                 result.user.id,
@@ -57,7 +58,7 @@ export class UsersController {
     @Delete("/:id/friend")
     async removeFriend(
         @Param("id", new UlidValidatorPipe()) userId: string,
-        @Req() req: Request
+        @Req() req: FastifyRequest
     ): Promise<RemoveFriendDto> {
         const result = await this.usersService.removeFriend(userId, req.user);
         this.websocketService.emitFriendRemoved(

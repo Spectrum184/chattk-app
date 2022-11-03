@@ -134,7 +134,7 @@ export const useUserStore = defineStore({
                     return formatAxiosError(e);
                 });
         },
-        removeOrDeclineFriendRequest(id) {
+        removeOrDeclineFriendRequest: async function (id) {
             return api
                 .delete(`/users/${id}/friend`)
                 .then((res) => {

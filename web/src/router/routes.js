@@ -2,6 +2,7 @@ import ChatLayout from "@/layouts/ChatLayout.vue";
 import ChatPage from "@/views/chat/ChatPage.vue";
 import FriendsPage from "@/views/friends/FriendsPage.vue";
 import HomeView from "@/views/IndexPage.vue";
+import ProfilePage from "@/views/user/ProfilePage.vue";
 
 export const routes = [
     {
@@ -26,6 +27,14 @@ export const routes = [
                 path: "/friends",
                 name: "friends",
                 component: FriendsPage,
+                meta: {
+                    auth: true,
+                },
+            },
+            {
+                path: "/profile/:username",
+                name: "profile",
+                component: ProfilePage,
                 meta: {
                     auth: true,
                 },

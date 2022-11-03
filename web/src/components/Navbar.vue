@@ -3,17 +3,26 @@
         class="h-14 flex justify-between w-full border-b border-gray-200 bg-gray-100"
     >
         <div class="flex items-center pl-4">
-            <button @click="goHome">
-                <span class="text-emerald-500 text-2xl font-semibold"
-                    >CHATTK</span
-                >
-            </button>
+            <span
+                class="text-emerald-500 text-2xl font-semibold hover:cursor-pointer"
+                @click="goHome"
+                >CHATTK</span
+            >
         </div>
         <div class="flex items-center pr-4">
             <div class="text-right z-50 flex items-center justify-end w-full">
                 <Menu as="div" class="relative my-auto inline-block text-left">
                     <MenuButton class="flex items-center">
-                        <Avatar size="xs" />
+                        <router-link
+                            :to="{
+                                name: 'profile',
+                                params: {
+                                    username,
+                                },
+                            }"
+                        >
+                            <Avatar size="xs" />
+                        </router-link>
                     </MenuButton>
 
                     <transition
@@ -68,6 +77,11 @@ import { UserCircleIcon } from "@heroicons/vue/outline";
 import { useI18n } from "vue-i18n";
 import router from "@/router";
 import LogoutButton from "@/components/LogoutButton.vue";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
+
+const username = userStore.getUser?.username;
+console.log(username);
 
 const { t } = useI18n({
     inheritLocale: true,

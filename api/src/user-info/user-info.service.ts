@@ -1,5 +1,9 @@
 import { convertMongoObj } from "@/common/helper";
-import { userInfoDefaultDto, UserInfoDto } from "@/dto/user-info.dto";
+import {
+    DefaultAvatar,
+    GetUserInfoDto,
+    UserInfoDto,
+} from "@/dto/user-info.dto";
 import { UserInfo } from "@/models/user-info.model";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
@@ -17,7 +21,7 @@ export class UserInfoService {
         private userRepository: UsersRepository
     ) {}
 
-    async findByUserId(username: string): Promise<UserInfo> {
+    async findByUsername(username: string): Promise<GetUserInfoDto> {
         const user = await this.userRepository.findOneByName(username);
 
         if (!user) throw new NotFoundException(UserError.userNotFound);
@@ -29,9 +33,19 @@ export class UserInfoService {
             message: "Result of find user info",
         });
 
-        if (!result) return userInfoDefaultDto;
+        if (!result)
+            return {
+                isUpdated: false,
+                username: user.username,
+                isShow: true,
+                avatar: DefaultAvatar,
+            };
 
-        return convertMongoObj(result);
+        return {
+            username: user.username,
+            isUpdated: true,
+            ...convertMongoObj(result),
+        };
     }
 
     async saveUserInfo({ userId, ...info }: UserInfoDto): Promise<UserInfo> {

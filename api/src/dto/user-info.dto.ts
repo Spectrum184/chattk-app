@@ -1,5 +1,6 @@
 import { ULID_PATTERN } from "@/constants";
 import {
+    IsBoolean,
     IsOptional,
     IsString,
     Length,
@@ -56,6 +57,12 @@ export class UserInfoDto {
     @IsString()
     @Length(1, 200)
     bio?: string;
+
+    @IsBoolean()
+    @Transform(({ value }: TransformFnParams) =>
+        typeof value === "string" ? value === "true" : value
+    )
+    isShow: boolean;
 }
 
 export class FindUserInfoParam {
@@ -67,10 +74,21 @@ export class FindUserInfoParam {
     username: string;
 }
 
-export const userInfoDefaultDto = {
-    id: "",
-    lastName: "",
-    firstName: "",
-    userId: "",
-    avatar: "https://res.cloudinary.com/thanhtk/image/upload/v1666446309/1400173657.kougyou_tiddeee__1022x1024__rk5jlz.jpg",
-};
+export const DefaultAvatar =
+    "https://res.cloudinary.com/thanhtk/image/upload/v1666446309/1400173657.kougyou_tiddeee__1022x1024__rk5jlz.jpg";
+
+export interface GetUserInfoDto {
+    isUpdated: boolean;
+    firstName?: string;
+    lastName?: string;
+    userId?: string;
+    phone?: string;
+    facebook?: string;
+    twitter?: string;
+    birthday?: Date;
+    avatar: string;
+    bio?: string;
+    updatedAt?: Date;
+    isShow: boolean;
+    username: string;
+}

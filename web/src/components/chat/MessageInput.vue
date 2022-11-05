@@ -15,7 +15,7 @@
                 @input="handleInputTextarea"
                 @keydown="shouldSubmit"
                 class="max-h-[208px] bg-gray-50 text-slate-800 resize-none outline-none p-1 rounded-full w-full"
-                :placeholder="t('chatPage.typeMessage')"
+                :placeholder="$t('chatPage.typeMessage')"
             />
             <button
                 @click="submitMessage"
@@ -38,7 +38,6 @@ import { socket } from "@/utils/socket";
 import { ChevronRightIcon, UploadIcon } from "@heroicons/vue/outline";
 import { onStartTyping } from "@vueuse/core";
 import { computed, defineEmits, nextTick, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 const props = defineProps(["chatId"]);
 const textarea = ref();
@@ -47,9 +46,6 @@ const message = ref("");
 const canSubmit = computed(() => !!message.value.trim());
 
 const messagesStore = useMessagesStore();
-const { t } = useI18n({
-    inheritLocale: true,
-});
 
 const emit = defineEmits(["scrollToBottom"]);
 

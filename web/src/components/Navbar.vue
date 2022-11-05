@@ -78,7 +78,6 @@ import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 
 const username = userStore.getUser?.username;
-console.log(username);
 
 const { t } = useI18n({
     inheritLocale: true,

@@ -3,7 +3,7 @@
         class="px-2 py-2 bg-emerald-500 rounded-md hover:opacity-80 flex"
         @click="setOpenModal(true)"
     >
-        <CogIcon class="w-6 h-6" /> {{ t("userInfoPage.editProfile") }}
+        <CogIcon class="w-6 h-6" /> {{ $t("userInfoPage.editProfile") }}
     </button>
     <TransitionRoot appear :show="isOpenModal" as="template">
         <Dialog as="div" @close="setOpenModal(false)" class="relative z-10">
@@ -39,7 +39,7 @@
                                 as="h3"
                                 class="text-lg font-medium leading-6 text-gray-900"
                             >
-                                {{ t("userInfoPage.editProfile") }}
+                                {{ $t("userInfoPage.editProfile") }}
                             </DialogTitle>
                             <div class="mt-2 md:min-w-[600px]">
                                 <FormKit
@@ -55,18 +55,22 @@
                                         <FormKit
                                             type="text"
                                             name="firstName"
-                                            :label="t('userInfoPage.firstName')"
+                                            :label="
+                                                $t('userInfoPage.firstName')
+                                            "
                                             validation="required:trim|length:1,100"
                                             :validation-messages="{
-                                                required: t(
+                                                required: $t(
                                                     'userInfoPage.validateLengthName'
                                                 ),
-                                                length: t(
-                                                    'userInfoPage.validateLengthUsername'
+                                                length: $t(
+                                                    'userInfoPage.validateLengthName'
                                                 ),
                                             }"
                                             :placeholder="
-                                                t('userInfoPage.enterFirstName')
+                                                $t(
+                                                    'userInfoPage.enterFirstName'
+                                                )
                                             "
                                             label-class="text-md text-black"
                                             input-class="relative w-full p-2 transition rounded outline-none border border-slate-300 bg-slate-100 focus:ring-1 focus:ring-emerald-500 text-black"
@@ -80,18 +84,18 @@
                                         <FormKit
                                             type="text"
                                             name="lastName"
-                                            :label="t('userInfoPage.lastName')"
+                                            :label="$t('userInfoPage.lastName')"
                                             validation="required:trim|length:1,100"
                                             :validation-messages="{
-                                                required: t(
+                                                required: $t(
                                                     'userInfoPage.validateLengthName'
                                                 ),
-                                                length: t(
+                                                length: $t(
                                                     'userInfoPage.validateLengthUsername'
                                                 ),
                                             }"
                                             :placeholder="
-                                                t('userInfoPage.enterLastName')
+                                                $t('userInfoPage.enterLastName')
                                             "
                                             label-class="text-md text-black"
                                             input-class="w-full p-2 transition rounded outline-none border border-slate-300 bg-slate-100 focus:ring-1 focus:ring-emerald-500 text-black"
@@ -105,10 +109,10 @@
                                         <FormKit
                                             type="text"
                                             name="phone"
-                                            :label="t('userInfoPage.phone')"
+                                            :label="$t('userInfoPage.phone')"
                                             validation="matches:/^\d{3}-\d{3}-\d{4}$/"
                                             :validation-messages="{
-                                                matches: t(
+                                                matches: $t(
                                                     'userInfoPage.validatePhone'
                                                 ),
                                             }"
@@ -125,15 +129,15 @@
                                         <FormKit
                                             type="date"
                                             name="birthday"
-                                            :label="t('userInfoPage.birthday')"
+                                            :label="$t('userInfoPage.birthday')"
                                             validation="before:2015-01-01"
                                             :validation-messages="{
-                                                before: t(
+                                                before: $t(
                                                     'userInfoPage.validateBirthday'
                                                 ),
                                             }"
                                             :placeholder="
-                                                t('userInfoPage.enterBirthday')
+                                                $t('userInfoPage.enterBirthday')
                                             "
                                             label-class="text-md text-black"
                                             input-class="w-full p-2 transition rounded outline-none border border-slate-300 bg-slate-100 focus:ring-1 focus:ring-emerald-500 text-black"
@@ -150,7 +154,7 @@
                                             label="Facebook"
                                             validation="length:0,200"
                                             :validation-messages="{
-                                                length: t(
+                                                length: $t(
                                                     'userInfoPage.validateSocial'
                                                 ),
                                             }"
@@ -170,7 +174,7 @@
                                             label="Twitter"
                                             validation="length:0,200"
                                             :validation-messages="{
-                                                length: t(
+                                                length: $t(
                                                     'userInfoPage.validateSocial'
                                                 ),
                                             }"
@@ -189,15 +193,15 @@
                                         <FormKit
                                             type="textarea"
                                             name="bio"
-                                            :label="t('userInfoPage.bio')"
+                                            :label="$t('userInfoPage.bio')"
                                             validation="length:0,200"
                                             :validation-messages="{
-                                                length: t(
+                                                length: $t(
                                                     'userInfoPage.validateBio'
                                                 ),
                                             }"
                                             :placeholder="
-                                                t('userInfoPage.enterBio')
+                                                $t('userInfoPage.enterBio')
                                             "
                                             label-class="text-md text-black"
                                             input-class="w-full p-2 transition rounded outline-none border border-slate-300 bg-slate-100 focus:ring-1 focus:ring-emerald-500 text-black"
@@ -213,7 +217,7 @@
                                     <FormKit
                                         type="checkbox"
                                         name="isShow"
-                                        :label="t('userInfoPage.isShow')"
+                                        :label="$t('userInfoPage.isShow')"
                                         label-class="text-md text-black"
                                         :value="
                                             userInfoStore.getUserInfo.isShow
@@ -229,7 +233,7 @@
                                             class="inline-flex justify-center rounded px-4 py-2 text-sm h-9 font-medium bg-rose-500"
                                             @click="setOpenModal(false)"
                                         >
-                                            {{ t("cancel") }}
+                                            {{ $t("cancel") }}
                                         </button>
                                         <FormKit
                                             type="submit"
@@ -238,7 +242,7 @@
                                             input-class="font-semibold p-2 outline-none focus:ring-2 rounded"
                                         >
                                             <button>
-                                                {{ t("userInfoPage.save") }}
+                                                {{ $t("userInfoPage.save") }}
                                             </button>
                                         </FormKit>
                                     </div>
@@ -252,7 +256,6 @@
     </TransitionRoot>
 </template>
 <script setup>
-import { useI18n } from "vue-i18n";
 import { ref } from "vue";
 import { useUserInfoStore } from "@/stores/infoUser";
 import {
@@ -260,13 +263,10 @@ import {
     DialogPanel,
     DialogTitle,
     TransitionRoot,
+    TransitionChild,
 } from "@headlessui/vue";
 import { CogIcon } from "@heroicons/vue/solid";
 import { FormKit, clearErrors, setErrors } from "@formkit/vue";
-
-const { t } = useI18n({
-    inheritLocale: true,
-});
 
 const userInfoStore = useUserInfoStore();
 const isOpenModal = ref(false);

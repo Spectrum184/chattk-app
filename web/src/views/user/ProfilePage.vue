@@ -32,7 +32,7 @@
                     "
                     class="text-slate-800"
                 >
-                    {{ t("userInfoPage.isNotUpdated") }}
+                    {{ $t("userInfoPage.isNotUpdated") }}
                 </h4>
                 <h4
                     v-else-if="
@@ -41,13 +41,13 @@
                             userStore.getUser.username
                     "
                 >
-                    {{ t("userInfoPage.notUpdated") }}
+                    {{ $t("userInfoPage.notUpdated") }}
                 </h4>
                 <UserProfile v-else />
             </div>
         </div>
         <h4 v-else class="text-rose-500 font-semibold text-2xl text-center">
-            {{ t("userInfoPage.noUser") }}
+            {{ $t("userInfoPage.noUser") }}
         </h4>
     </div>
 
@@ -64,10 +64,6 @@ import { useRoute } from "vue-router";
 import { useUserInfoStore } from "@/stores/infoUser";
 import { onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
-import { useI18n } from "vue-i18n";
-const { t } = useI18n({
-    inheritLocale: true,
-});
 
 const route = useRoute();
 const userInfoStore = useUserInfoStore();

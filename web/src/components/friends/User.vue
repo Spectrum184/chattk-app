@@ -88,7 +88,7 @@
                                         as="h3"
                                         class="text-xl font-medium leading-6 text-slate-800 px-4 pt-4"
                                     >
-                                        {{ t("remove") }}
+                                        {{ $t("remove") }}
                                         <span class="font-semibold">{{
                                             username
                                         }}</span
@@ -96,11 +96,11 @@
                                     </DialogTitle>
                                     <div class="mt-2 px-4">
                                         <p class="leading-snug text-slate-700">
-                                            {{ t("friendPage.sureRemove") }}
+                                            {{ $t("friendPage.sureRemove") }}
                                             <span class="font-bold">{{
                                                 username
                                             }}</span>
-                                            {{ t("friendPage.sureRemove2") }}
+                                            {{ $t("friendPage.sureRemove2") }}
                                         </p>
                                     </div>
 
@@ -113,7 +113,7 @@
                                             class="disabled:cursor-not-allowed disabled:opacity-70 transition py-2 px-4 focus:outline-none rounded-md text-slate-100 hover:bg-gray-600/80"
                                             @click="closeRemoveConfirmation"
                                         >
-                                            {{ t("cancel") }}
+                                            {{ $t("cancel") }}
                                         </button>
                                         <button
                                             type="button"
@@ -126,7 +126,7 @@
                                                 class="w-6 h-6"
                                             />
                                             <span v-else>{{
-                                                t("remove")
+                                                $t("remove")
                                             }}</span>
                                         </button>
                                     </div>
@@ -159,7 +159,6 @@ import {
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import { useI18n } from "vue-i18n";
 
 const props = defineProps([
     "username",
@@ -174,9 +173,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const toast = useToast();
 const { activeStatus } = useActiveStatusRef(computed(() => props.online));
-const { t } = useI18n({
-    inheritLocale: true,
-});
+
 const acceptFriendRequestLoading = ref(false);
 const openChatLoading = ref(false);
 const removeFriendLoading = ref(false);

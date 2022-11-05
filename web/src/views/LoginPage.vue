@@ -2,7 +2,7 @@
     <div class="h-full w-full flex">
         <div class="m-auto w-[400px] p-6 rounded shadow-lg border">
             <p class="text-rose-400" v-if="isLoggedOut">
-                {{ t("loginPage.loggedOutMessage") }}
+                {{ $t("loginPage.loggedOutMessage") }}
             </p>
             <TabGroup @change="changeTab">
                 <TabList class="flex space-x-1 rounded-md bg-gray-300 p-1">
@@ -15,7 +15,7 @@
                                     : 'text-white hover:bg-gray-300',
                             ]"
                         >
-                            {{ t("login") }}
+                            {{ $t("login") }}
                         </button>
                     </Tab>
                     <Tab v-slot="{ selected }" class="w-full outline-none">
@@ -27,7 +27,7 @@
                                     : 'text-white hover:bg-gray-300',
                             ]"
                         >
-                            {{ t("loginPage.createAccount") }}
+                            {{ $t("loginPage.createAccount") }}
                         </button>
                     </Tab>
                 </TabList>
@@ -51,7 +51,7 @@
                             v-if="isAccountCreated"
                         >
                             <p class="text-center">
-                                {{ t("loginPage.createAccountSuccess") }}
+                                {{ $t("loginPage.createAccountSuccess") }}
                             </p>
                         </div>
                         <FormKit
@@ -80,15 +80,11 @@ import { clearErrors, FormKit, setErrors } from "@formkit/vue";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 const isFormSubmitting = ref(false);
 const isLoggedOut = ref(false);
 const isAccountCreated = ref(false);
 const isSignupFormOpen = ref(false);
-const { t } = useI18n({
-    inheritLocale: true,
-});
 
 const userStore = useUserStore();
 useTitle(

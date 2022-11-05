@@ -6,7 +6,7 @@
             class="h-14 px-2 w-full flex items-center justify-between border-b shrink-0"
         >
             <h2 class="text-xl text-slate-800 font-medium">
-                {{ t("chatPage.chat") }}
+                {{ $t("chatPage.chat") }}
             </h2>
         </div>
         <div
@@ -31,11 +31,6 @@
 <script setup>
 import Chat from "@/components/chat/Chat.vue";
 import { useChatsStore } from "@/stores/chats";
-import { useI18n } from "vue-i18n";
-
-const { t } = useI18n({
-    inheritLocale: true,
-});
 
 const chatsStore = useChatsStore();
 </script>

@@ -8,6 +8,7 @@ export const i18n = createI18n({
     globalInjection: true,
     locale: import.meta.env.VITE_APP_I18N_LOCALE || "vi",
     fallbackLocale: import.meta.env.VITE_APP_I18N_FALLBACK_LOCALE || "vi",
+    fallbackWarn: false,
     messages: {
         vi,
         en,

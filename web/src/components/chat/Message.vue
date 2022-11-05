@@ -59,7 +59,7 @@
         >
             <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />
             <p class="inline-block ml-2" v-if="error">
-                {{ t("chatPage.sendMessage") }}
+                {{ $t("chatPage.sendMessage") }}
             </p>
         </div>
     </div>
@@ -70,7 +70,6 @@ import MessageStatus from "@/components/chat/MessageStatus.vue";
 import { useFormatTime } from "@/composables/FormatTime";
 import { useMessagesStore } from "@/stores/messages";
 import RetryIcon from "vue-material-design-icons/Refresh.vue";
-import { useI18n } from "vue-i18n";
 
 const props = defineProps([
     "fromSelf",
@@ -85,9 +84,7 @@ const props = defineProps([
 
 const { formattedTime } = useFormatTime(props.time);
 const messagesStore = useMessagesStore();
-const { t } = useI18n({
-    inheritLocale: true,
-});
+
 const resendMessage = () => {
     messagesStore.resendMessage(props.messageId, props.chatId);
 };

@@ -5,10 +5,10 @@
             class="text-center w-full bg-rose-500 text-sm self-start"
             v-if="internalMiscStore.wsNetworkError"
         >
-            {{ t("chatPage.reconnecting") }}
+            {{ $t("chatPage.reconnecting") }}
         </p>
         <h1 class="text-black self-center">
-            {{ t("homePage.mainMessage") }}
+            {{ $t("homePage.mainMessage") }}
         </h1>
     </div>
 </template>
@@ -18,11 +18,6 @@ import LoginPage from "@/views/LoginPage.vue";
 import { useInternalMiscStore } from "@/stores/internalMisc";
 import { useTitle } from "@vueuse/core";
 import { computed } from "vue";
-import { useI18n } from "vue-i18n";
-
-const { t } = useI18n({
-    inheritLocale: true,
-});
 
 const internalMiscStore = useInternalMiscStore();
 

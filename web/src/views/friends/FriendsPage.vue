@@ -2,7 +2,7 @@
     <div class="flex flex-col h-full w-full">
         <div class="h-14 p-2 flex items-center">
             <h2 class="text-2xl leading-none font-medium text-slate-800">
-                {{ t("friendPage.friend") }}
+                {{ $t("friendPage.friend") }}
             </h2>
         </div>
         <TabGroup>
@@ -19,7 +19,7 @@
                                 : 'text-slate-800',
                         ]"
                     >
-                        {{ t("friendPage.friend") }}
+                        {{ $t("friendPage.friend") }}
                     </button>
                 </Tab>
                 <Tab v-slot="{ selected }" class="w-full outline-none">
@@ -32,7 +32,7 @@
                                 : 'text-slate-800',
                         ]"
                     >
-                        {{ t("friendPage.request") }}
+                        {{ $t("friendPage.request") }}
                     </button>
                 </Tab>
                 <Tab v-slot="{ selected }" class="w-full outline-none">
@@ -45,7 +45,7 @@
                                 : 'text-slate-800',
                         ]"
                     >
-                        {{ t("friendPage.addFriend") }}
+                        {{ $t("friendPage.addFriend") }}
                     </button>
                 </Tab>
             </TabList>
@@ -75,7 +75,7 @@
                                 :class="open ? '' : '-rotate-90'"
                             />
                             <p class="text-sm leading-none">
-                                {{ t("friendPage.incoming") }} —
+                                {{ $t("friendPage.incoming") }} —
                                 {{ userStore.getIncomingRequests.length }}
                             </p>
                         </DisclosureButton>
@@ -118,7 +118,7 @@
                                 :class="open ? '' : '-rotate-90'"
                             />
                             <p class="text-sm leading-none">
-                                {{ t("friendPage.outgoing") }} —
+                                {{ $t("friendPage.outgoing") }} —
                                 {{ userStore.getOutgoingRequests.length }}
                             </p>
                         </DisclosureButton>
@@ -150,7 +150,7 @@
                 </TabPanel>
                 <TabPanel class="focus:outline-none">
                     <p class="text-slate-600 mb-2">
-                        {{ t("friendPage.friendAdded") }}
+                        {{ $t("friendPage.friendAdded") }}
                     </p>
                     <form @submit.prevent="sendFriendRequest">
                         <div class="w-full flex rounded-md bg-gray-200">
@@ -159,7 +159,7 @@
                                 :value="friendUsername"
                                 :disabled="isRequestSending"
                                 class="disabled:opacity-60 w-full py-2 pl-2 outline-none bg-transparent text-slate-800"
-                                :placeholder="t('friendPage.enterUsername')"
+                                :placeholder="$t('friendPage.enterUsername')"
                             />
                             <button
                                 :disabled="
@@ -172,7 +172,7 @@
                                     v-if="isRequestSending"
                                 />
                                 <span v-else>{{
-                                    t("friendPage.sendRequest")
+                                    $t("friendPage.sendRequest")
                                 }}</span>
                             </button>
                         </div>
@@ -208,7 +208,6 @@ import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { useTitle } from "@vueuse/core";
 import { ref } from "vue";
 import { useToast } from "vue-toastification";
-import { useI18n } from "vue-i18n";
 
 const userStore = useUserStore();
 const chatsStore = useChatsStore();
@@ -218,9 +217,6 @@ useTitle("Friends");
 const friendUsername = ref("");
 const sendFriendRequestError = ref("");
 const isRequestSending = ref(false);
-const { t } = useI18n({
-    inheritLocale: true,
-});
 
 const sendFriendRequest = async () => {
     isRequestSending.value = true;

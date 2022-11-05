@@ -50,5 +50,30 @@
         "sureRemove2": "trong danh sách bạn bè? Bạn sẽ không tiếp tục chat với người này tới lúc bạn kết bạn lại."
     },
     "remove": "Xoá",
-    "cancel": "Huỷ bỏ"
+    "cancel": "Huỷ bỏ",
+    "userInfoPage": {
+        "isNotUpdated": "Bạn chưa cập nhật trang cá nhân",
+        "notUpdated": "Tài khoản này chưa cập nhật thông tin",
+        "privateProfile": "Tài khoản này là tài khảon riêng tư",
+        "editProfile": "Chỉnh sửa",
+        "save": "Cập nhật",
+        "firstName": "Họ",
+        "lastName": "Tên",
+        "enterLastName": "Vui lòng nhập tên",
+        "enterFirstName": "Vui lòng nhập họ",
+        "validateRequired": "Vui lòng nhập",
+        "validateLengthName": "Họ hoặc tên từ 1 đến 100 ký tự",
+        "phone": "Số điện thoại",
+        "enterPhone": "Nhập số điện thoại",
+        "validatePhone": "Vui lòng nhập số điện thoại ở định dạng xxx-xxx-xxxx",
+        "birthday": "Sinh nhật",
+        "validateBirthday": "Không thể chọn ngày sinh trước ngày 01-01-2015",
+        "enterBirthday": "Nhập ngày sinh",
+        "validateSocial": "Vui lòng dùng các link rút gọn",
+        "bio": "Trích dẫn",
+        "validateBio": "Tôi đa 200 ký tự",
+        "enterBio": "Nhập trích dẫn, tối đa 200 ký tự",
+        "isShow": "Hiển thị thông tin với người khác",
+        "noUser": "Không tồn tại người này"
+    }
 }

@@ -48,5 +48,10 @@
         "sureRemove2": "from your friends? You wont be able to talk with them until you re-friend them."
     },
     "remove": "Remove",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "userInfoPage": {
+        "isNotUpdated": "Please update profile",
+        "notUpdated": "This account haven't update profile",
+        "privateProfile": "This is private account"
+    }
 }

@@ -1,5 +1,5 @@
-import en from "@/locales/en.json";
 import vi from "@/locales/vi.json";
+import en from "@/locales/en.json";
 import ja from "@/locales/ja.json";
 import { createI18n } from "vue-i18n";
 

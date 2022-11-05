@@ -13,16 +13,7 @@
             <div class="text-right z-50 flex items-center justify-end w-full">
                 <Menu as="div" class="relative my-auto inline-block text-left">
                     <MenuButton class="flex items-center">
-                        <router-link
-                            :to="{
-                                name: 'profile',
-                                params: {
-                                    username,
-                                },
-                            }"
-                        >
-                            <Avatar size="xs" />
-                        </router-link>
+                        <Avatar size="xs" />
                     </MenuButton>
 
                     <transition
@@ -38,7 +29,13 @@
                         >
                             <div class="px-1 py-1">
                                 <MenuItem v-slot="{ active }">
-                                    <button
+                                    <router-link
+                                        :to="{
+                                            name: 'profile',
+                                            params: {
+                                                username,
+                                            },
+                                        }"
                                         :class="[
                                             active
                                                 ? 'bg-gray-200 text-slate-800'
@@ -52,7 +49,7 @@
                                             aria-hidden="true"
                                         />
                                         {{ t("homePage.profile") }}
-                                    </button>
+                                    </router-link>
                                 </MenuItem>
                             </div>
                             <div class="px-1 py-1">

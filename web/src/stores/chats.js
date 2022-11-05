@@ -1,3 +1,4 @@
+import { chatService } from "@/services";
 import { useMessagesStore } from "@/stores/messages";
 import { useUserStore } from "@/stores/user";
 import { api } from "@/utils/axios";
@@ -52,7 +53,7 @@ export const useChatsStore = defineStore({
                         chat.lastMessageId
                     ),
                     beginningOfChatReached: chat.beginningOfChatReached,
-                    typing: chat.typing?.length ? chat.typing : []
+                    typing: chat.typing?.length ? chat.typing : [],
                 };
             };
         },
@@ -60,7 +61,7 @@ export const useChatsStore = defineStore({
             return this.getChatById(state.currentlyOpenChatId);
         },
         currentChatIsTyping() {
-            return !!this.currentlyOpenChat?.typing?.length
+            return !!this.currentlyOpenChat?.typing?.length;
         },
         getChatIdOfUserById(state) {
             return (id) => {
@@ -83,16 +84,25 @@ export const useChatsStore = defineStore({
         setChats(chats) {
             this.chats = chats;
         },
-        openChat(recipientId) {
-            return api
-                .post(`/chat/${recipientId}?type=user`)
-                .then((res) => {
-                    this.addOrReplaceChat(res.data);
-                    return { ok: res.data.id };
+        // openChat(recipientId) {
+        //     return api
+        //         .post(`/chat/${recipientId}?type=user`)
+        //         .then((res) => {
+        //             this.addOrReplaceChat(res.data);
+        //             return { ok: res.data.id };
+        //         })
+        //         .catch((e) => {
+        //             return e.response?.data?.message || e.message;
+        //         });
+        // },
+        openChat: async function (recipientId) {
+            return chatService
+                .openChat(recipientId)
+                .then((data) => {
+                    this.addOrReplaceChat(data);
+                    return { ok: data.id };
                 })
-                .catch((e) => {
-                    return e.response?.data?.message || e.message;
-                });
+                .catch((e) => e.response?.data?.message || e.message);
         },
         updateChat({ id, ...chat }) {
             const chatIndex = this.chats.findIndex((chat) => chat.id === id);
@@ -104,16 +114,18 @@ export const useChatsStore = defineStore({
         },
 
         setTypingStatus(chatId, userId, isTyping) {
-            const chatIndex = this.chats.findIndex((chat) => chat.id === chatId);
-            if(chatIndex > -1) {
+            const chatIndex = this.chats.findIndex(
+                (chat) => chat.id === chatId
+            );
+            if (chatIndex > -1) {
                 const chat = this.chats[chatIndex];
-                if(!chat.typing) chat.typing = [];
+                if (!chat.typing) chat.typing = [];
 
-                if(isTyping && !chat.typing.includes(userId)) {
-                    chat.typing.push(userId)
-                } else if(!isTyping && chat.typing.includes(userId)) {
-                    chat.typing = chat.typing.filter(id => id != userId)
-                };
+                if (isTyping && !chat.typing.includes(userId)) {
+                    chat.typing.push(userId);
+                } else if (!isTyping && chat.typing.includes(userId)) {
+                    chat.typing = chat.typing.filter((id) => id != userId);
+                }
             }
         },
 

@@ -25,11 +25,17 @@ export const useUserInfoStore = defineStore({
                 .then((res) => {
                     this.initData(res.data);
                 })
-                .catch((e) => formatAxiosError(e));
+                .catch((e) => {
+                    this.initData({
+                        username: "",
+                    });
+                    return formatAxiosError(e);
+                });
         },
         clearUserInfo() {
             this.userInfo = null;
             this.initialized = false;
         },
+        saveUserInfo: async function (info) {},
     },
 });

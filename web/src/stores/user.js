@@ -7,6 +7,7 @@ import { defineStore } from "pinia";
 import localforage from "localforage";
 import platform from "platform";
 import { relationStatus, userType } from "@/utils/constants";
+import { userService } from "@/services";
 
 export const useUserStore = defineStore({
     id: "user",
@@ -47,16 +48,32 @@ export const useUserStore = defineStore({
                 sessionFriendlyName += ` on ${platform.os.family} ${
                     platform.os.version ?? ""
                 }`;
-            return axios
-                .post(`${import.meta.env.VITE_API_URL}/auth/login`, {
-                    username,
-                    password,
-                    friendlyName: sessionFriendlyName?.trim(),
-                })
-                .then(async (res) => {
-                    await localforage.setItem("session", res.data.session);
-                    initSocket();
+            // return axios
+            //     .post(`${import.meta.env.VITE_API_URL}/auth/login`, {
+            //         username,
+            //         password,
+            //         friendlyName: sessionFriendlyName?.trim(),
+            //     })
+            //     .then(async (res) => {
+            //         await localforage.setItem("session", res.data.session);
+            //         initSocket();
 
+            //         /**
+            //          * this will show the loading spinner instead.
+            //          * the socket "Ready" event will set the user.
+            //          */
+
+            //         this.setInitialized(false);
+            //         return { ok: true };
+            //     })
+            //     .catch((e) => {
+            //         return formatAxiosError(e);
+            //     });
+            return userService
+                .login(username, password, sessionFriendlyName?.trim())
+                .then(async (data) => {
+                    await localforage.setItem("session", data.session);
+                    initSocket();
                     /**
                      * this will show the loading spinner instead.
                      * the socket "Ready" event will set the user.
@@ -65,23 +82,25 @@ export const useUserStore = defineStore({
                     this.setInitialized(false);
                     return { ok: true };
                 })
-                .catch((e) => {
-                    return formatAxiosError(e);
-                });
+                .catch((e) => e);
         },
         async createAccount(username, password, email) {
-            return axios
-                .post(`${import.meta.env.VITE_API_URL}/auth/signup`, {
-                    username,
-                    password,
-                    email,
-                })
-                .then((res) => {
-                    return { ok: true };
-                })
-                .catch((e) => {
-                    return formatAxiosError(e);
-                });
+            // return axios
+            //     .post(`${import.meta.env.VITE_API_URL}/auth/signup`, {
+            //         username,
+            //         password,
+            //         email,
+            //     })
+            //     .then((res) => {
+            //         return { ok: true };
+            //     })
+            //     .catch((e) => {
+            //         return formatAxiosError(e);
+            //     });
+            return userService
+                .createAccount(username, password, email)
+                .then((data) => data)
+                .catch((e) => e);
         },
         setUser(user, setInitialized = true) {
             this.auth.user = user;

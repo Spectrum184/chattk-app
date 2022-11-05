@@ -1,5 +1,4 @@
-import { api } from "@/utils/axios";
-import formatAxiosError from "@/utils/formatAxiosError";
+import { userService } from "@/services";
 import { defineStore } from "pinia";
 
 export const useUserInfoStore = defineStore({
@@ -20,16 +19,14 @@ export const useUserInfoStore = defineStore({
             this.initialized = initialized;
         },
         setUserInfo: async function (username) {
-            return api
-                .get(`${import.meta.env.VITE_API_URL}/user-info/${username}`)
-                .then((res) => {
-                    this.initData(res.data);
-                })
+            return userService
+                .getUserInfo(username)
+                .then((data) => this.initData(data))
                 .catch((e) => {
                     this.initData({
                         username: "",
                     });
-                    return formatAxiosError(e);
+                    return e;
                 });
         },
         clearUserInfo() {

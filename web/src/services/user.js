@@ -1,38 +1,76 @@
 import formatAxiosError from "@/utils/formatAxiosError";
+import { api } from "@/utils/axios";
+import axios from "axios";
 
-export class UserService {
-    #api;
-    #axios;
-    #serverUrl;
-    constructor(api, axios, serverUrl) {
-        this.#api = api;
-        this.#axios = axios;
-        this.#serverUrl = serverUrl;
-    }
+const SERVER_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-    async login(username, password, friendlyName) {
-        return this.#axios
-            .post(`${this.#serverUrl}/auth/login`, {
-                username,
-                password,
-                friendlyName,
-            })
-            .then(() => ({
-                ok: true,
-            }))
-            .catch((e) => formatAxiosError(e));
-    }
-
-    async createAccount(username, password, email) {
-        return this.#axios
-            .post(`${this.#serverUrl}/auth/signup`, {
-                username,
-                password,
-                email,
-            })
-            .then(() => ({
-                ok: true,
-            }))
-            .catch((e) => formatAxiosError(e));
-    }
+async function login(username, password, friendlyName) {
+    return axios
+        .post(`${SERVER_URL}/auth/login`, {
+            username,
+            password,
+            friendlyName,
+        })
+        .then((res) => res.data)
+        .catch((e) => {
+            throw formatAxiosError(e);
+        });
 }
+
+async function createAccount(username, password, email) {
+    return axios
+        .post(`${SERVER_URL}/auth/signup`, {
+            username,
+            password,
+            email,
+        })
+        .then((res) => res.data)
+        .catch((e) => {
+            throw formatAxiosError(e);
+        });
+}
+
+async function acceptFriendRequest(id) {
+    return api
+        .put(`/users/${id}/friend?type=id`)
+        .then((res) => res.data)
+        .catch((e) => {
+            throw formatAxiosError(e);
+        });
+}
+
+async function sendFriendRequest(username) {
+    return api
+        .put(`/users/${username}/friend`)
+        .then((res) => res.data)
+        .catch((e) => {
+            throw formatAxiosError(e);
+        });
+}
+
+async function removeOrDeclineFriendRequest(id) {
+    return api
+        .delete(`/users/${id}/friend`)
+        .then((res) => res.data)
+        .catch((e) => {
+            throw formatAxiosError(e);
+        });
+}
+
+async function getUserInfo(username) {
+    return api
+        .get(`/user-info/${username}`)
+        .then((res) => res.data)
+        .catch((e) => {
+            throw formatAxiosError(e);
+        });
+}
+
+export {
+    login,
+    createAccount,
+    acceptFriendRequest,
+    sendFriendRequest,
+    removeOrDeclineFriendRequest,
+    getUserInfo,
+};

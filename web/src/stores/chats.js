@@ -1,7 +1,6 @@
 import { chatService } from "@/services";
 import { useMessagesStore } from "@/stores/messages";
 import { useUserStore } from "@/stores/user";
-import { api } from "@/utils/axios";
 import { compareString } from "@/utils/utils";
 import { defineStore } from "pinia";
 
@@ -84,17 +83,6 @@ export const useChatsStore = defineStore({
         setChats(chats) {
             this.chats = chats;
         },
-        // openChat(recipientId) {
-        //     return api
-        //         .post(`/chat/${recipientId}?type=user`)
-        //         .then((res) => {
-        //             this.addOrReplaceChat(res.data);
-        //             return { ok: res.data.id };
-        //         })
-        //         .catch((e) => {
-        //             return e.response?.data?.message || e.message;
-        //         });
-        // },
         openChat: async function (recipientId) {
             return chatService
                 .openChat(recipientId)

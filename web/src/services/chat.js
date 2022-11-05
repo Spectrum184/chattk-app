@@ -1,15 +1,12 @@
-export class ChatService {
-    #api;
-    #serverUrl;
-    constructor(api, serverUrl) {
-        this.#api = api;
-        this.#serverUrl = serverUrl;
-    }
+import { api } from "@/utils/axios";
 
-    async openChat(recipientId) {
-        return this.#api
-            .post(`${this.#serverUrl}/chat/${recipientId}?type=user`)
-            .then((res) => res.data)
-            .catch((e) => e);
-    }
+async function openChat(recipientId) {
+    return api
+        .post(`/chat/${recipientId}?type=user`)
+        .then((res) => res.data)
+        .catch((e) => {
+            throw e;
+        });
 }
+
+export { openChat };

@@ -1,6 +1,6 @@
+import { messageService } from "@/services";
 import { useChatsStore } from "@/stores/chats";
 import { useUserStore } from "@/stores/user";
-import { api } from "@/utils/axios";
 import { compareString } from "@/utils/utils";
 import dayjs from "dayjs";
 import { defineStore } from "pinia";
@@ -45,21 +45,25 @@ export const useMessagesStore = defineStore({
                         dataToReturn.dateSeparator = dayjs(
                             dataToReturn.timestamp
                         ).format("dddd, MMM DD, YYYY");
-                        
-                        if(!dataToReturn.fromSelf) dataToReturn.showAvatar = true;
+
+                        if (!dataToReturn.fromSelf)
+                            dataToReturn.showAvatar = true;
                     }
 
-                    if (message.authorId !== lastMessageAuthor && !dataToReturn.fromSelf) {
+                    if (
+                        message.authorId !== lastMessageAuthor &&
+                        !dataToReturn.fromSelf
+                    ) {
                         dataToReturn.showAvatar = true;
                     }
-                    
+
                     lastMessageAuthor = message.authorId;
                 } else {
                     dataToReturn.dateSeparator = dayjs(
                         dataToReturn.timestamp
                     ).format("dddd, MMM DD, YYYY");
                     if (!dataToReturn.fromSelf) dataToReturn.showAvatar = true;
-                    
+
                     lastMessageAuthor = message.authorId;
                 }
                 return dataToReturn;
@@ -97,12 +101,13 @@ export const useMessagesStore = defineStore({
             return ackId;
         },
         saveMessage(chatId, ackId, content) {
-            api.post(`/chat/${chatId}/messages`, { content, ackId })
-                .then(({ data }) => {
+            messageService
+                .saveMessage(chatId, ackId, content)
+                .then((data) => {
                     const { chatId, ackId, ...rest } = data;
                     this.addMessageToStore(rest, chatId, ackId);
                 })
-                .catch((e) => {
+                .catch(() => {
                     this.addMessageToStore(
                         { error: true },
                         chatId,
@@ -167,21 +172,14 @@ export const useMessagesStore = defineStore({
             const chatsStore = useChatsStore();
 
             if (this.messagesByChat[chatId]?.stale) {
-                return api
-                    .get(`/chat/${chatId}/messages?limit=50`)
-                    .then(({ data }) => {
-                        if (data.length < 50)
-                            chatsStore.updateChat({
-                                id: chatId,
-                                beginningOfChatReached:
-                                    data[data.length - 1].id,
-                            });
-                        this.setInitialMessages(
-                            data,
-                            chatId,
-                            keepFailedMessages
-                        );
-                    });
+                return messageService.getMessage(chatId).then((data) => {
+                    if (data.length < 50)
+                        chatsStore.updateChat({
+                            id: chatId,
+                            beginningOfChatReached: data[data.length - 1].id,
+                        });
+                    this.setInitialMessages(data, chatId, keepFailedMessages);
+                });
             } else if (!this.messagesByChat[chatId]?.messages?.length) {
                 chatsStore.updateChat({
                     id: chatId,
@@ -190,9 +188,9 @@ export const useMessagesStore = defineStore({
             }
         },
         async loadMessageBeforeId(messageId, chatId) {
-            return api
-                .get(`/chat/${chatId}/messages?before=${messageId}&limit=50`)
-                .then(({ data }) => {
+            return messageService
+                .loadMessageBeforeId(messageId, chatId)
+                .then((data) => {
                     if (!data.length)
                         return { beginningOfChatReached: messageId };
                     this.addMessagesToStore(data, chatId);

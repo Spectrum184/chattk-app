@@ -1,8 +1,5 @@
-import { api } from "@/utils/axios";
-import formatAxiosError from "@/utils/formatAxiosError";
 import { initSocket } from "@/utils/socket";
 import { compareString } from "@/utils/utils";
-import axios from "axios";
 import { defineStore } from "pinia";
 import localforage from "localforage";
 import platform from "platform";
@@ -48,27 +45,6 @@ export const useUserStore = defineStore({
                 sessionFriendlyName += ` on ${platform.os.family} ${
                     platform.os.version ?? ""
                 }`;
-            // return axios
-            //     .post(`${import.meta.env.VITE_API_URL}/auth/login`, {
-            //         username,
-            //         password,
-            //         friendlyName: sessionFriendlyName?.trim(),
-            //     })
-            //     .then(async (res) => {
-            //         await localforage.setItem("session", res.data.session);
-            //         initSocket();
-
-            //         /**
-            //          * this will show the loading spinner instead.
-            //          * the socket "Ready" event will set the user.
-            //          */
-
-            //         this.setInitialized(false);
-            //         return { ok: true };
-            //     })
-            //     .catch((e) => {
-            //         return formatAxiosError(e);
-            //     });
             return userService
                 .login(username, password, sessionFriendlyName?.trim())
                 .then(async (data) => {
@@ -85,18 +61,6 @@ export const useUserStore = defineStore({
                 .catch((e) => e);
         },
         async createAccount(username, password, email) {
-            // return axios
-            //     .post(`${import.meta.env.VITE_API_URL}/auth/signup`, {
-            //         username,
-            //         password,
-            //         email,
-            //     })
-            //     .then((res) => {
-            //         return { ok: true };
-            //     })
-            //     .catch((e) => {
-            //         return formatAxiosError(e);
-            //     });
             return userService
                 .createAccount(username, password, email)
                 .then((data) => data)
@@ -117,52 +81,46 @@ export const useUserStore = defineStore({
             this.setUser(user);
         },
         async acceptFriendRequest(id) {
-            return api
-                .put(`/users/${id}/friend?type=id`)
-                .then((res) => {
-                    if (res.data.type === userType.requestAccepted) {
+            return userService
+                .acceptFriendRequest(id)
+                .then((data) => {
+                    if (data.type === userType.requestAccepted) {
                         this.setUserRelatedToFriend(id);
-                    } else if (res.data.type === userType.requestSent) {
+                    } else if (data.type === userType.requestSent) {
                         // gonna deal with that 0.000000000000001% that this ever SOMEHOW happens.
                         this.setUserRelatedToOutgoingOrAddUser(
                             id,
-                            res.data.user.username
+                            data.user.username
                         );
                     }
-                    return { ok: res.data.message };
+                    return { ok: data.message };
                 })
-                .catch((e) => {
-                    return formatAxiosError(e);
-                });
+                .catch((e) => e);
         },
         sendFriendRequest: async function (username) {
-            return api
-                .put(`/users/${username}/friend`)
-                .then((res) => {
-                    if (res.data.type === userType.requestSent) {
+            return userService
+                .sendFriendRequest(username)
+                .then((data) => {
+                    if (data.type === userType.requestSent) {
                         this.setUserRelatedToOutgoingOrAddUser(
-                            res.data.user.id,
-                            res.data.user.username
+                            data.user.id,
+                            data.user.username
                         );
-                    } else if (res.data.type === userType.requestAccepted) {
-                        this.setUserRelatedToFriend(res.data.user.id);
+                    } else if (data.type === userType.requestAccepted) {
+                        this.setUserRelatedToFriend(data.user.id);
                     }
-                    return { ok: res.data.message };
+                    return { ok: data.message };
                 })
-                .catch((e) => {
-                    return formatAxiosError(e);
-                });
+                .catch((e) => e);
         },
         removeOrDeclineFriendRequest: async function (id) {
-            return api
-                .delete(`/users/${id}/friend`)
-                .then((res) => {
+            return userService
+                .removeOrDeclineFriendRequest(id)
+                .then((data) => {
                     this.setUserRelationToNone(id);
-                    return { ok: res.data.message };
+                    return { ok: data.message };
                 })
-                .catch((e) => {
-                    return formatAxiosError(e);
-                });
+                .catch((e) => e);
         },
         updateUser({ id: userId, ...user }) {
             const userIndex = this.users.findIndex((u) => u.id === userId);

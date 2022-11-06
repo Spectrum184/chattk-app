@@ -91,7 +91,7 @@
                                                     'userInfoPage.validateLengthName'
                                                 ),
                                                 length: $t(
-                                                    'userInfoPage.validateLengthUsername'
+                                                    'userInfoPage.validateLengthName'
                                                 ),
                                             }"
                                             :placeholder="
@@ -279,5 +279,17 @@ function setOpenModal(value) {
 async function updateProfile(userInfo) {
     isFormSubmitting.value = true;
     clearErrors("formUpdateProfile");
+    userInfoStore
+        .saveUserInfo(userInfo)
+        .then((message) => {
+            if (message.ok) {
+                isOpenModal.value = false;
+            } else {
+                setErrors("formUpdateProfile", [`${message}`]);
+            }
+        })
+        .finally(() => {
+            isFormSubmitting.value = false;
+        });
 }
 </script>

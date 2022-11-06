@@ -1,4 +1,3 @@
-import { convertMongoObj } from "@/common/helper";
 import {
     DefaultAvatar,
     GetUserInfoDto,
@@ -11,15 +10,23 @@ import { UserInfoRepository } from "./user-info.repository";
 import { ulid } from "ulid";
 import { UsersRepository } from "@/users/users.repository";
 import { UserError } from "@/users/users.constants";
+import { ConfigService } from "@nestjs/config";
+import { Encryption } from "@/common/encryption";
 
 @Injectable()
 export class UserInfoService {
+    encryption;
     constructor(
         @InjectPinoLogger(UserInfoService.name)
         private logger: PinoLogger,
         private userInfoRepository: UserInfoRepository,
-        private userRepository: UsersRepository
-    ) {}
+        private userRepository: UsersRepository,
+        private config: ConfigService
+    ) {
+        this.encryption = new Encryption(
+            this.config.get("userInfoEncryptKey") || ""
+        );
+    }
 
     async findByUsername(username: string): Promise<GetUserInfoDto> {
         const user = await this.userRepository.findOneByName(username);
@@ -41,16 +48,22 @@ export class UserInfoService {
                 avatar: DefaultAvatar,
             };
 
+        const decryptResult = this.encryptionInfo(
+            { ...result, id: result._id },
+            "decrypt"
+        );
+
         return {
             username: user.username,
             isUpdated: true,
-            ...convertMongoObj(result),
+            ...decryptResult,
         };
     }
 
     async saveUserInfo({ userId, ...info }: UserInfoDto): Promise<UserInfo> {
         const result = await this.userInfoRepository.findById(userId);
         const updatedAt = new Date();
+        let newInfo;
 
         if (!result) {
             this.logger.info({
@@ -58,23 +71,75 @@ export class UserInfoService {
                 message: "Create user info",
             });
             const id = ulid();
-            return await this.userInfoRepository.saveUserInfo({
+            newInfo = this.encryptionInfo(
+                {
+                    id,
+                    ...info,
+                    updatedAt,
+                    userId,
+                },
+                "encrypt"
+            );
+            await this.userInfoRepository.saveUserInfo(newInfo);
+
+            return {
                 id,
-                userId,
                 ...info,
                 updatedAt,
-            });
+                userId,
+            };
         }
 
         this.logger.info({
             event: `update_user_info:${userId}`,
             message: "Update user info",
         });
-        return await this.userInfoRepository.updateUserInfo({
+
+        newInfo = this.encryptionInfo(
+            {
+                id: result._id,
+                ...info,
+                updatedAt,
+                userId,
+            },
+            "encrypt"
+        );
+
+        await this.userInfoRepository.updateUserInfo(newInfo);
+
+        return {
             id: result._id,
-            userId,
             ...info,
             updatedAt,
-        });
+            userId,
+        };
+    }
+
+    encryptionInfo(userInfo: UserInfo, type: "encrypt" | "decrypt"): UserInfo {
+        const newInfo = Object.fromEntries(
+            Object.entries(userInfo).filter(([_, v]) => v)
+        );
+        const keyNotEncrypt = [
+            "updatedAt",
+            "id",
+            "userId",
+            "avatar",
+            "isShow",
+            "_id",
+        ];
+
+        for (const key in newInfo) {
+            if (Object.prototype.hasOwnProperty.call(newInfo, key)) {
+                const data = newInfo[key];
+                if (!keyNotEncrypt.includes(key)) {
+                    if (type === "decrypt") {
+                        newInfo[key] = this.encryption.decrypt(data);
+                    } else {
+                        newInfo[key] = this.encryption.encrypt(data);
+                    }
+                }
+            }
+        }
+        return { ...userInfo, ...newInfo };
     }
 }

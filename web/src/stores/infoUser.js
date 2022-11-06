@@ -33,6 +33,19 @@ export const useUserInfoStore = defineStore({
             this.userInfo = null;
             this.initialized = false;
         },
-        saveUserInfo: async function (info) {},
+        saveUserInfo: async function (info) {
+            return userService
+                .saveUserInfo(info)
+                .then((data) => {
+                    this.userInfo = {
+                        ...data,
+                        username: this.userInfo.username,
+                        isUpdated: true,
+                    };
+
+                    return { ok: true };
+                })
+                .catch((e) => e);
+        },
     },
 });

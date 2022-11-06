@@ -48,14 +48,14 @@
                                             class="mr-2 h-5 w-5 text-emerald-400"
                                             aria-hidden="true"
                                         />
-                                        {{ t("homePage.profile") }}
+                                        {{ $t("homePage.profile") }}
                                     </router-link>
                                 </MenuItem>
                             </div>
                             <div class="px-1 py-1">
                                 <MenuItem v-slot="{ active }">
                                     <LogoutButton
-                                        :name="t('homePage.logout')"
+                                        :name="$t('homePage.logout')"
                                         :active="active"
                                     />
                                 </MenuItem>
@@ -71,7 +71,6 @@
 import Avatar from "./user/Avatar.vue";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { UserCircleIcon } from "@heroicons/vue/outline";
-import { useI18n } from "vue-i18n";
 import router from "@/router";
 import LogoutButton from "@/components/LogoutButton.vue";
 import { useUserStore } from "@/stores/user";
@@ -79,9 +78,6 @@ const userStore = useUserStore();
 
 const username = userStore.getUser?.username;
 
-const { t } = useI18n({
-    inheritLocale: true,
-});
 const goHome = () => {
     router.push("/");
 };

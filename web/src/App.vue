@@ -13,6 +13,10 @@ onMounted(() => {
     initSocket();
 });
 setInterval(() => internalMiscStore.updateTime(Date.now()), 1000);
+console.log(
+    "%c[ChatTK]:Mở console lên làm gì bạn êi!!!!",
+    "color: red; font-size: 30px;"
+);
 </script>
 
 <template>

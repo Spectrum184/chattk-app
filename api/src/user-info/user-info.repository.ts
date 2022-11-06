@@ -16,20 +16,17 @@ export class UserInfoRepository {
             _id: id,
             ...info,
         });
-
-        return { id, ...info };
     }
 
     async updateUserInfo({ id, ...info }: UserInfo) {
-        await this.mongo.userInfo.findOneAndUpdate(
+        await this.mongo.userInfo.updateOne(
             {
                 _id: id,
             },
             {
-                ...info,
-            }
+                $set: info,
+            },
+            { upsert: true }
         );
-
-        return { id, ...info };
     }
 }

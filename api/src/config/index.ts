@@ -51,5 +51,6 @@ export const config = () => {
             ? parseInt(process.env.BCRYPT_ROUNDS)
             : 10,
         disableSignup: !!process.env.DISABLE_SIGNUP,
+        userInfoEncryptKey: process.env.USER_INFO_ENCRYPT_KEY || "test",
     };
 };

@@ -66,6 +66,16 @@ async function getUserInfo(username) {
         });
 }
 
+async function saveUserInfo(info) {
+    return api
+        .post("/user-info", info)
+        .then((res) => res.data)
+        .catch((e) => {
+            console.log(e);
+            throw formatAxiosError(e);
+        });
+}
+
 export {
     login,
     createAccount,
@@ -73,4 +83,5 @@ export {
     sendFriendRequest,
     removeOrDeclineFriendRequest,
     getUserInfo,
+    saveUserInfo,
 };

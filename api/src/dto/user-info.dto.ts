@@ -27,23 +27,24 @@ export class UserInfoDto {
     )
     lastName: string;
 
+    @IsOptional()
     @Length(26, 26)
     @Matches(ULID_PATTERN)
     userId: string;
 
     @IsOptional()
     @IsString()
-    @Length(1, 50)
+    @Length(0, 50)
     phone?: string;
 
     @IsOptional()
     @IsString()
-    @Length(1, 200)
+    @Length(0, 200)
     facebook?: string;
 
     @IsOptional()
     @IsString()
-    @Length(1, 200)
+    @Length(0, 200)
     twitter?: string;
 
     @IsOptional()

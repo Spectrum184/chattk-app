@@ -9,6 +9,13 @@
             <div class="w-[30px] shrink-0" v-show="!fromSelf">
                 <Avatar size="xs" v-if="showAvatar" />
             </div>
+            <div class="shrink-0 self-center" v-show="fromSelf">
+                <MessageStatus
+                    :from-self="fromSelf"
+                    :sending="sending"
+                    :error="error"
+                />
+            </div>
             <div
                 :class="[
                     'rounded-xl py-2 px-3 message',
@@ -29,11 +36,6 @@
                 >
                     <!-- TODO: make it shorter, currently it looks kinda ugly when date is shown -->
                     <p class="inline-block">{{ formattedTime }}</p>
-                    <MessageStatus
-                        :from-self="fromSelf"
-                        :sending="sending"
-                        :error="error"
-                    />
                 </div>
             </div>
             <div class="w-10 flex-shrink-0 self-center transition duration-100">
@@ -57,7 +59,7 @@
             v-if="error"
             :class="['text-rose-400', fromSelf ? 'text-right' : '']"
         >
-            <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />
+            <ExclamationIcon />
             <p class="inline-block ml-2" v-if="error">
                 {{ $t("chatPage.sendMessage") }}
             </p>
@@ -70,6 +72,7 @@ import MessageStatus from "@/components/chat/MessageStatus.vue";
 import { useFormatTime } from "@/composables/FormatTime";
 import { useMessagesStore } from "@/stores/messages";
 import RetryIcon from "vue-material-design-icons/Refresh.vue";
+import { ExclamationIcon } from "@heroicons/vue/outline";
 
 const props = defineProps([
     "fromSelf",

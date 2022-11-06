@@ -31,7 +31,7 @@
             </div>
         </div>
         <p
-            class="text-center bg-rose-500 text-sm"
+            class="text-center bg-rose-500 text-sm w-full"
             v-if="internalMiscStore.wsNetworkError"
         >
             {{ $t("chatPage.reconnecting") }}
@@ -124,7 +124,7 @@
             v-else
             class="w-full px-2 py-3 bg-slate-800 flex items-center text-slate-300"
         >
-            <font-awesome-icon icon="fa-solid fa-ban" class="w-5 h-5 mr-2" />
+            <BanIcon class="w-5 h-5 mr-2 text-rose-500" />
             <p>{{ $t("chatPage.mustFriend") }}</p>
         </div>
     </div>
@@ -146,6 +146,7 @@ import {
     ArrowSmDownIcon,
     RefreshIcon,
     InformationCircleIcon,
+    BanIcon,
 } from "@heroicons/vue/outline";
 
 import { useRoute } from "vue-router";

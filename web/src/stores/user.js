@@ -63,7 +63,9 @@ export const useUserStore = defineStore({
         async createAccount(username, password, email) {
             return userService
                 .createAccount(username, password, email)
-                .then((data) => data)
+                .then((data) => {
+                    return { ok: true };
+                })
                 .catch((e) => e);
         },
         setUser(user, setInitialized = true) {

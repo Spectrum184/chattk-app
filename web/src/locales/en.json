@@ -74,6 +74,7 @@
         "validateBio": "Tôi đa 200 ký tự",
         "enterBio": "Nhập trích dẫn, tối đa 200 ký tự",
         "isShow": "Hiển thị thông tin với người khác",
-        "noUser": "Không tồn tại người này"
+        "noUser": "Không tồn tại người này",
+        "security": "Tất cả các thông tin của bạn sẽ được chúng tôi mã hoá đảm bảo vẫn đề bảo mật"
     }
 }

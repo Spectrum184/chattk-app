@@ -12,7 +12,7 @@
                     />
                 </div>
                 <div class="flex flex-col justify-center items-baseline">
-                    <h3 class="text-slate-800 font-semibold text-lg">
+                    <h3 class="text-slate-800 font-semibold text-xl my-2">
                         {{ userInfoStore.getUserInfo.username }}
                     </h3>
                     <ModalEditProfile

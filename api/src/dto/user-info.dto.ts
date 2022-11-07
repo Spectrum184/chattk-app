@@ -10,6 +10,12 @@ import {
 } from "class-validator";
 import { Transform, TransformFnParams } from "class-transformer";
 
+export enum SexEnum {
+    Male = "male",
+    Female = "female",
+    Other = "other",
+}
+
 export class UserInfoDto {
     @MinLength(1)
     @MaxLength(100)
@@ -49,6 +55,20 @@ export class UserInfoDto {
 
     @IsOptional()
     birthday?: Date;
+
+    @IsOptional()
+    @Matches(
+        `^${Object.values(SexEnum)
+            .filter((v) => typeof v !== "number")
+            .join("|")}$`,
+        "i"
+    )
+    sex: SexEnum;
+
+    @IsOptional()
+    @IsString()
+    @Length(1, 200)
+    address: string;
 
     @IsString()
     avatar: string =
@@ -92,4 +112,6 @@ export interface GetUserInfoDto {
     updatedAt?: Date;
     isShow: boolean;
     username: string;
+    sex?: string;
+    address?: string;
 }

@@ -1,6 +1,6 @@
 <template>
     <LoginPage v-if="!userStore.getUser" />
-    <div v-else class="w-full flex justify-center">
+    <div v-else class="w-full flex justify-center flex-col">
         <p
             class="text-center w-full bg-rose-500 text-sm self-start"
             v-if="internalMiscStore.wsNetworkError"

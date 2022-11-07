@@ -149,14 +149,15 @@
                                             "
                                         />
                                         <FormKit
-                                            type="text"
+                                            type="url"
                                             name="facebook"
                                             label="Facebook"
-                                            validation="length:0,200"
+                                            validation="length:0,200|url"
                                             :validation-messages="{
                                                 length: $t(
                                                     'userInfoPage.validateSocial'
                                                 ),
+                                                url: $t('userInfoPage.url'),
                                             }"
                                             placeholder="Facebook"
                                             label-class="text-md text-black"
@@ -169,14 +170,15 @@
                                             "
                                         />
                                         <FormKit
-                                            type="text"
+                                            type="url"
                                             name="twitter"
                                             label="Twitter"
-                                            validation="length:0,200"
+                                            validation="length:0,200|url"
                                             :validation-messages="{
                                                 length: $t(
                                                     'userInfoPage.validateSocial'
                                                 ),
+                                                url: $t('userInfoPage.url'),
                                             }"
                                             placeholder="Twitter"
                                             label-class="text-md text-black"
@@ -186,6 +188,59 @@
                                             :value="
                                                 userInfoStore.getUserInfo
                                                     .twitter || ''
+                                            "
+                                        />
+                                        <FormKit
+                                            type="text"
+                                            name="address"
+                                            :label="$t('userInfoPage.address')"
+                                            validation="length:0,200"
+                                            :validation-messages="{
+                                                length: $t(
+                                                    'userInfoPage.validateSocial'
+                                                ),
+                                            }"
+                                            :placeholder="
+                                                $t('userInfoPage.address')
+                                            "
+                                            label-class="text-md text-black"
+                                            input-class="w-full p-2 transition rounded outline-none border border-slate-300 bg-slate-100 focus:ring-1 focus:ring-emerald-500 text-black"
+                                            message-class="text-rose-400"
+                                            help-class="text-gray-400"
+                                            :value="
+                                                userInfoStore.getUserInfo
+                                                    .address || ''
+                                            "
+                                        />
+                                        <FormKit
+                                            type="select"
+                                            :label="$t('userInfoPage.sex')"
+                                            name="sex"
+                                            label-class="text-md text-black"
+                                            input-class="w-full p-2 transition rounded outline-none border border-slate-300 bg-slate-100 focus:ring-1 focus:ring-emerald-500 text-black"
+                                            :options="[
+                                                {
+                                                    label: $t(
+                                                        'userInfoPage.male'
+                                                    ),
+                                                    value: 'male',
+                                                },
+                                                {
+                                                    label: $t(
+                                                        'userInfoPage.female'
+                                                    ),
+                                                    value: 'female',
+                                                },
+                                                {
+                                                    label: $t(
+                                                        'userInfoPage.other'
+                                                    ),
+                                                    value: 'other',
+                                                },
+                                            ]"
+                                            :value="
+                                                userInfoStore.getUserInfo.sex ||
+                                                'male'
                                             "
                                         />
                                     </div>
@@ -225,6 +280,11 @@
                                         input-class="w-4 h-4 mr-2"
                                         wrapper-class="flex items-center"
                                     />
+                                    <p
+                                        class="text-rose-500 text-xs italic my-2"
+                                    >
+                                        {{ $t("userInfoPage.security") }}
+                                    </p>
                                     <div
                                         class="flex justify-center items-center border-t pt-4 mt-4 gap-6 border-slate-800"
                                     >
@@ -271,6 +331,11 @@ import { FormKit, clearErrors, setErrors } from "@formkit/vue";
 const userInfoStore = useUserInfoStore();
 const isOpenModal = ref(false);
 const isFormSubmitting = ref(false);
+const sexOption = [
+    { label: "male", value: "male" },
+    { label: "female", value: "female" },
+    { label: "other", value: "other" },
+];
 
 function setOpenModal(value) {
     isOpenModal.value = value;

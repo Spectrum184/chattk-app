@@ -1,8 +1,3 @@
-export enum SexEnum {
-    Male = "Male",
-    Female = "Female",
-    Other = "Other",
-}
 export interface UserInfo {
     id: string;
     firstName: string;
@@ -16,6 +11,8 @@ export interface UserInfo {
     bio?: string;
     updatedAt?: Date;
     isShow: boolean;
+    sex?: string;
+    address?: string;
 }
 
 export interface UserInfoDoc extends Omit<UserInfo, "id"> {

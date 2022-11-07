@@ -55,6 +55,7 @@ async function bootstrap() {
     );
     app.useLogger(logger);
     app.useWebSocketAdapter(customIoAdapter);
+
     await app.listen(config.get("port") as number, "0.0.0.0", () => {
         logger.log("Server is listening on port:" + config.get("port"));
     });

@@ -8,7 +8,7 @@
                 <div class="mr-4">
                     <Avatar
                         :avatar="userInfoStore.getUserInfo.avatar"
-                        size="lg"
+                        size="xl"
                     />
                 </div>
                 <div class="flex flex-col justify-center items-baseline">

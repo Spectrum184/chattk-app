@@ -25,22 +25,45 @@ import { computed } from "vue";
 const props = defineProps(["online", "avatar", "size"]);
 
 const sizePx = computed(() => {
-    if (props.size === "xs") {
-        return "30";
-    } else if (props.size === "sm") {
-        return "35";
-    } else if (props.size === "lg") {
-        return "95";
-    } else return "48";
+    let size;
+    switch (props.size) {
+        case "xs":
+            size = "30";
+            break;
+        case "sm":
+            size = "35";
+            break;
+        case "lg":
+            size = "95";
+            break;
+        case "xl":
+            size = "148";
+            break;
+
+        default:
+            size = "48";
+            break;
+    }
+
+    return size;
 });
 const onlineStatusClasses = computed(() => {
-    if (props.size === "xs")
-        return; // note: too small, online status probably wouldn't look good on this size.
-    else if (props.size === "sm") {
-        return "left-7 top-7 w-2.5 h-2.5";
-    } else if (props.size === "lg") {
-        return "w-6 h-6 left-[4.5rem] top-[4.5rem]";
+    let className;
+    switch (props.size) {
+        case "xs":
+            className = ""; // note: too small, online status probably wouldn't look good on this size.
+            break;
+        case "sm":
+            className = "left-7 top-7 w-2.5 h-2.5";
+            break;
+        case "lg":
+            className = "w-6 h-6 left-[4.5rem] top-[4.5rem]";
+            break;
+        case "xl":
+        default:
+            className = "left-9 top-9 w-3.5 h-3.5";
+            break;
     }
-    return "left-9 top-9 w-3.5 h-3.5";
+    return className;
 });
 </script>

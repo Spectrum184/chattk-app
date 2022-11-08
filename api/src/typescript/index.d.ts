@@ -7,6 +7,7 @@ declare module "fastify" {
             sessionName?: string | undefined;
             sessionId: string;
         };
+        file: () => Promise<FileStream>;
     }
 }
 

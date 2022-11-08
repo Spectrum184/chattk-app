@@ -52,5 +52,8 @@ export const config = () => {
             : 10,
         disableSignup: !!process.env.DISABLE_SIGNUP,
         userInfoEncryptKey: process.env.USER_INFO_ENCRYPT_KEY || "test",
+        cldName: process.env.CLD_CLOUD_NAME,
+        cldApiKey: process.env.CLD_API_KEY,
+        cldApiSecret: process.env.CLD_API_SECRET,
     };
 };

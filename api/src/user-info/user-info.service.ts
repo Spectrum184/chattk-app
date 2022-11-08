@@ -4,7 +4,11 @@ import {
     UserInfoDto,
 } from "@/dto/user-info.dto";
 import { UserInfo } from "@/models/user-info.model";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from "@nestjs/common";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { UserInfoRepository } from "./user-info.repository";
 import { ulid } from "ulid";
@@ -12,6 +16,7 @@ import { UsersRepository } from "@/users/users.repository";
 import { UserError } from "@/users/users.constants";
 import { ConfigService } from "@nestjs/config";
 import { Encryption } from "@/common/encryption";
+import { CLDService } from "@/common/cloudinary/cloudinary.services";
 
 @Injectable()
 export class UserInfoService {
@@ -21,7 +26,8 @@ export class UserInfoService {
         private logger: PinoLogger,
         private userInfoRepository: UserInfoRepository,
         private userRepository: UsersRepository,
-        private config: ConfigService
+        private config: ConfigService,
+        private cldService: CLDService
     ) {
         this.encryption = new Encryption(
             this.config.get("userInfoEncryptKey") || ""
@@ -113,6 +119,21 @@ export class UserInfoService {
             updatedAt,
             userId,
         };
+    }
+
+    async uploadAvatar(
+        data: Buffer,
+        userId: string
+    ): Promise<{ avatar: string }> {
+        return this.cldService
+            .uploadImage(data)
+            .then(async (data) => {
+                await this.userInfoRepository.updateAvatar(data.url, userId);
+                return { avatar: data.url };
+            })
+            .catch((e) => {
+                throw new BadRequestException(e);
+            });
     }
 
     encryptionInfo(userInfo: UserInfo, type: "encrypt" | "decrypt"): UserInfo {

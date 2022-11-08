@@ -29,4 +29,18 @@ export class UserInfoRepository {
             { upsert: true }
         );
     }
+
+    async updateAvatar(avatar: string, userId: string) {
+        await this.mongo.userInfo.updateOne(
+            {
+                userId,
+            },
+            {
+                $set: {
+                    avatar,
+                },
+            },
+            { upsert: true }
+        );
+    }
 }

@@ -15,6 +15,7 @@ import {
 } from "@nestjs/common";
 import { UserInfoService } from "./user-info.service";
 import { FastifyRequest } from "fastify";
+import { Public } from "@/auth/auth.decorators";
 
 @UseGuards(AuthenticatedGuard)
 @Controller("user-info")
@@ -34,5 +35,13 @@ export class UserInfoController {
             ...body,
             userId: req.user.id,
         });
+    }
+
+    @Post("/avatar")
+    async uploadAvatar(@Req() req: FastifyRequest) {
+        const data = await req.file();
+        const buffer = await data.toBuffer();
+
+        return this.userInfoService.uploadAvatar(buffer, req.user.id);
     }
 }

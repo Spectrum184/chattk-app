@@ -18,11 +18,14 @@ async function bootstrap() {
         AppModule,
         new FastifyAdapter()
     );
-
     const config = app.get<ConfigService>(ConfigService);
     const logger = app.get(Logger);
-
     const customIoAdapter = new CustomIoAdapter(app);
+
+    await app.register(require("@fastify/cookie"));
+    await app.register(require("@fastify/helmet"));
+    await app.register(require("@fastify/csrf-protection"));
+    await app.register(require("@fastify/multipart"));
 
     app.enableCors({
         origin: config.get("corsOrigins") as string[],

@@ -1,3 +1,4 @@
+import { CLDModule } from "@/common/cloudinary/cloudinary.module";
 import { UsersModule } from "@/users/users.module";
 import { Module } from "@nestjs/common";
 import { UserInfoController } from "./user-info.controller";
@@ -8,6 +9,6 @@ import { UserInfoService } from "./user-info.service";
     controllers: [UserInfoController],
     providers: [UserInfoService, UserInfoRepository],
     exports: [UserInfoService],
-    imports: [UsersModule],
+    imports: [UsersModule, CLDModule],
 })
 export class UserInfoModule {}

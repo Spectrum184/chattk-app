@@ -42,6 +42,7 @@ describe("passport Bearer Strategy", () => {
                 relations: [{ id: "3", status: RelationStatus.Friend }],
             },
             sessionName: "Chrome on linux",
+            email: "nvthanh1804@gmail.com",
         };
         const token = "token";
         jest.spyOn(authService, "validateToken").mockResolvedValue(

@@ -73,6 +73,7 @@ describe("AuthController", () => {
         const user = {
             username: req.user.username,
             password: "password",
+            email: "nvthanh1804@gmail.com",
         };
         jest.spyOn(usersService, "createUser").mockResolvedValue(undefined);
         await expect(authController.createUser(user)).resolves.toBe(undefined);
@@ -92,7 +93,9 @@ describe("AuthController", () => {
         };
         jest.spyOn(authService, "createSession").mockResolvedValue(session);
 
-        await expect(authController.login(req as any)).resolves.toStrictEqual({
+        await expect(
+            authController.login(req as any, "0.0.0.0")
+        ).resolves.toStrictEqual({
             id: req.user.id,
             username: req.user.username,
             session,

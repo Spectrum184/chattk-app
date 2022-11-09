@@ -115,6 +115,7 @@ describe("UsersService", () => {
                 profile: {
                     relations: [],
                 },
+                email: "nvthanh1804@gmail.com",
             };
             const result = {
                 passwordHash: user.passwordHash,
@@ -160,6 +161,7 @@ describe("UsersService", () => {
                 _id: "1",
                 passwordHash: "awe",
                 username: "Hi",
+                email: "nvthanh1804@gmail.com",
             };
             const result = {
                 passwordHash: user.passwordHash,
@@ -210,6 +212,7 @@ describe("UsersService", () => {
                 profile: {
                     relations: [],
                 },
+                email: "nvthanh1804@gmail.com",
             };
             const result = {
                 passwordHash: user.passwordHash,
@@ -254,6 +257,7 @@ describe("UsersService", () => {
                 _id: "1",
                 passwordHash: "awe",
                 username: "Hi",
+                email: "nvthanh1804@gmail.com",
             };
             const result = {
                 passwordHash: user.passwordHash,
@@ -532,6 +536,7 @@ describe("UsersService", () => {
             id: "userId",
             passwordHash: "passwordHash",
             username: "username",
+            email: "nvthanh1804@gmail.com",
         };
         const chatId = "chatId";
 
@@ -714,11 +719,13 @@ describe("UsersService", () => {
             id: "1",
             passwordHash: "aweawe",
             username: "sender",
+            email: "nvthanh1804@gmail.com",
         };
         const receiver: UserNoProfile = {
             id: "2",
             passwordHash: "aweawe",
             username: "receiver",
+            email: "nvthanh1804@gmail.com",
         };
         describe("happy path", () => {
             describe("send a friend request", () => {
@@ -1167,6 +1174,7 @@ describe("UsersService", () => {
         const username = "username";
         const password = "password";
         const passwordHash = "passwordHash";
+        const email = "nvthanh1804@gmail.com";
 
         it("should create user", async () => {
             jest.spyOn(configService, "get").mockImplementation(
@@ -1182,7 +1190,7 @@ describe("UsersService", () => {
             jest.spyOn(bcrypt, "hash").mockResolvedValue(passwordHash as never); //silence typescript.
 
             await expect(
-                usersService.createUser(username, password)
+                usersService.createUser({ username, password, email })
             ).resolves.toBeUndefined();
 
             expect(configService.get).toBeCalledWith("disableSignup");
@@ -1214,7 +1222,8 @@ describe("UsersService", () => {
                     return;
                 }
             );
-            const fn = () => usersService.createUser(username, password);
+            const fn = () =>
+                usersService.createUser({ username, password, email });
             await expect(fn).rejects.toThrowError(ImATeapotException);
             await expect(fn).rejects.toThrowError(
                 "User registration is currently turned off."
@@ -1237,7 +1246,8 @@ describe("UsersService", () => {
             jest.spyOn(mongo.users, "findOne").mockResolvedValue({
                 _id: "thisuserexistsId",
             } as never);
-            const fn = () => usersService.createUser(username, password);
+            const fn = () =>
+                usersService.createUser({ username, password, email });
 
             await expect(fn).rejects.toThrowError(ConflictException);
             await expect(fn).rejects.toThrowError("Username is taken.");

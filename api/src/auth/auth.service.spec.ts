@@ -14,6 +14,7 @@ import * as ulid from "ulid";
 import { ConfigService } from "@nestjs/config";
 import { getLoggerToken } from "nestjs-pino";
 import pinoLoggerMock from "@/mocks/pino-logger.mock";
+import { AuthError } from "./auth.constants";
 
 const moduleMocker = new ModuleMocker(global);
 
@@ -29,6 +30,7 @@ describe("AuthService", () => {
         passwordHash:
             "$2b$10$Wz9VGNz0oJPtAv7akD3HYeVjscV49dPWVOADO8DiDN48iSvE60VjG",
         username: "test",
+        email: "nvthanh1804@gmail.com",
     };
     const userWithProfile: User = {
         ...user,
@@ -54,10 +56,13 @@ describe("AuthService", () => {
 
     beforeEach(async () => {
         const moduleRef = await Test.createTestingModule({
-            providers: [AuthService, {
-                provide: getLoggerToken(AuthService.name),
-                useValue: pinoLoggerMock
-            }],
+            providers: [
+                AuthService,
+                {
+                    provide: getLoggerToken(AuthService.name),
+                    useValue: pinoLoggerMock,
+                },
+            ],
         })
             .useMocker((token) => {
                 if (token === MONGODB_PROVIDER) {
@@ -223,7 +228,7 @@ describe("AuthService", () => {
 
             const mockFindOne = jest
                 .spyOn(authService, "findOneByToken")
-                .mockResolvedValue("session-not-found");
+                .mockResolvedValue(AuthError.sessionNotFound);
             const mockTouchSession = jest.spyOn(authService, "touchSession");
 
             await expect(fn).rejects.toThrow(UnauthorizedException);
@@ -243,7 +248,7 @@ describe("AuthService", () => {
             const token = "token";
             const mockFindOne = jest
                 .spyOn(authService, "findOneByToken")
-                .mockResolvedValue("user-not-found");
+                .mockResolvedValue(AuthError.userNotFound);
             const mockTouchSession = jest.spyOn(authService, "touchSession");
 
             const fn = async () => await authService.validateToken(token);
@@ -342,7 +347,7 @@ describe("AuthService", () => {
 
         it("should create session (with no name)", async () => {
             await expect(
-                authService.createSession(user.id)
+                authService.createSession(user.id, "0.0.0.0")
             ).resolves.toStrictEqual({ id: sessionId, token: sessionToken });
             expect(mongo.sessions.insertOne).toBeCalledWith({
                 userId: user.id,

@@ -21,22 +21,17 @@
             <div class="mt-8 border-t border-slate-700">
                 <h4
                     v-if="!userInfoStore.getUserInfo.isUpdated && canUpdate"
-                    class="text-slate-800"
+                    class="text-slate-800 my-4"
                 >
                     {{ $t("userInfoPage.isNotUpdated") }}
                 </h4>
                 <h4
+                    class="my-4 text-slate-800"
                     v-else-if="
                         !userInfoStore.getUserInfo.isUpdated && !canUpdate
                     "
                 >
-                    {{
-                        $t(
-                            canUpdate
-                                ? "userInfoPage.notUpdated"
-                                : "userInfoPage.viewAvatar"
-                        )
-                    }}
+                    {{ $t("userInfoPage.notUpdated") }}
                 </h4>
                 <UserProfile v-else />
             </div>
@@ -245,7 +240,6 @@ async function updateAvatar() {
 watch(
     () => route.params.username,
     (username) => {
-        logger.web.info(username);
         if (!username) return;
         userInfoStore.setUserInfo(username);
     },

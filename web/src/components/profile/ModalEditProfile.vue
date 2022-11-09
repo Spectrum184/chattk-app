@@ -326,16 +326,11 @@ import {
     TransitionChild,
 } from "@headlessui/vue";
 import { CogIcon } from "@heroicons/vue/solid";
-import { FormKit, clearErrors, setErrors } from "@formkit/vue";
+import { clearErrors, setErrors } from "@formkit/vue";
 
 const userInfoStore = useUserInfoStore();
 const isOpenModal = ref(false);
 const isFormSubmitting = ref(false);
-const sexOption = [
-    { label: "male", value: "male" },
-    { label: "female", value: "female" },
-    { label: "other", value: "other" },
-];
 
 function setOpenModal(value) {
     isOpenModal.value = value;

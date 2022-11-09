@@ -47,5 +47,16 @@ export const useUserInfoStore = defineStore({
                 })
                 .catch((e) => e);
         },
+        updateAvatar: async function (file) {
+            const form = new FormData();
+            form.append("file", file);
+            return userService
+                .updateAvatar(form)
+                .then((data) => {
+                    this.userInfo.avatar = data.avatar;
+                    return { ok: true };
+                })
+                .catch((e) => e);
+        },
     },
 });

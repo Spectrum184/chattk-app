@@ -76,6 +76,20 @@ async function saveUserInfo(info) {
         });
 }
 
+async function updateAvatar(data) {
+    return api
+        .post("/user-info/avatar", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then((res) => res.data)
+        .catch((e) => {
+            console.log(e);
+            throw formatAxiosError(e);
+        });
+}
+
 export {
     login,
     createAccount,
@@ -84,4 +98,5 @@ export {
     removeOrDeclineFriendRequest,
     getUserInfo,
     saveUserInfo,
+    updateAvatar,
 };

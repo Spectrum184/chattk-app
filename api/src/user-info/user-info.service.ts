@@ -126,7 +126,7 @@ export class UserInfoService {
         userId: string
     ): Promise<{ avatar: string }> {
         return this.cldService
-            .uploadImage(data)
+            .uploadImage(data, "chat-tk-avatar")
             .then(async (data) => {
                 await this.userInfoRepository.updateAvatar(data.url, userId);
                 return { avatar: data.url };

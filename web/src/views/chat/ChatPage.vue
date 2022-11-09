@@ -12,14 +12,23 @@
                         size="sm"
                         :online="chatsStore.currentlyOpenChat.online === true"
                     />
-                    <div class="ml-2">
-                        <p class="text-lg leading-none text-slate-800">
+                    <router-link
+                        :to="{
+                            name: 'profile',
+                            params: {
+                                username: chatsStore.currentlyOpenChat.name,
+                            },
+                        }"
+                    >
+                        <p
+                            class="text-lg leading-none text-slate-800 ml-2 hover:underline"
+                        >
                             {{ chatsStore.currentlyOpenChat.name }}
                         </p>
                         <p class="text-sm leading-none text-slate-800">
                             {{ activeStatus }}
                         </p>
-                    </div>
+                    </router-link>
                 </div>
                 <div class="flex items-center">
                     <button class="hover:opacity-80">

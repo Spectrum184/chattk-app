@@ -15,13 +15,19 @@ export class CLDService {
     }
 
     async uploadImage(
-        file: Buffer
+        file: Buffer,
+        folder: string
     ): Promise<UploadApiResponse | UploadApiErrorResponse> {
         return new Promise((resolve, reject) => {
-            const upload = v2.uploader.upload_stream((error, result) => {
-                if (error || !result) return reject(error);
-                resolve(result);
-            });
+            const upload = v2.uploader.upload_stream(
+                {
+                    folder,
+                },
+                (error, result) => {
+                    if (error || !result) return reject(error);
+                    resolve(result);
+                }
+            );
             const stream = Readable.from(file);
             stream.pipe(upload);
         });

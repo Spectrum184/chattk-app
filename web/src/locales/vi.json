@@ -52,7 +52,7 @@
     "remove": "Xoá",
     "cancel": "Huỷ bỏ",
     "userInfoPage": {
-        "isNotUpdated": "Bạn chưa cập nhật trang cá nhân",
+        "isNotUpdated": "Tài khoả chưa cập nhật trang cá nhân",
         "notUpdated": "Tài khoản này chưa cập nhật thông tin",
         "privateProfile": "Tài khoản này là tài khảon riêng tư",
         "editProfile": "Chỉnh sửa",
@@ -82,6 +82,11 @@
         "sexSelect": "Vui lòng chọn giới tính",
         "male": "Nam",
         "female": "Nữ",
-        "other": "Khác"
-    }
+        "other": "Khác",
+        "editAvatar": "Chỉnh sửa avatar",
+        "dragDrop": " <span class='font-semibold'>Bấm để tải ảnh</span> hoặc kéo thả",
+        "viewAvatar": "Ảnh đại diện",
+        "updateSuccess": "Cập nhật thành cồng"
+    },
+    "close": "Đóng"
 }
